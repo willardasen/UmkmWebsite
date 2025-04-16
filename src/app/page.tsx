@@ -15,7 +15,8 @@ export default function Home() {
           </Link>
           {/* <Link href="/auth/register" className="btn btn-outline">
             Register
-          </Link> */}
+          </Link> */} 
+          test hehe
         </div>
       </div>
     </div>
