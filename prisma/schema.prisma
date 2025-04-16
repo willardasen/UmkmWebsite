@@ -1,0 +1,133 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Admin {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String
+  role      Role     @default(BANK) 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+ 
+}
+
+model UMKMUser {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String
+  role      Role     @default(USER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relasi satu-satu dengan data UMKM
+  umkm             UMKM? // Opsional, karena mungkin user belum membuat data UMKM
+  // Relasi ke Loan Applications (sebagai pemohon)
+  loanApplications LoanApplication[]
+  // Jika diperlukan, relasi ke SRLAssessment
+  srlAssessments   SRLAssessment[]
+}
+
+model UMKM {
+  id                  String   @id @default(cuid())
+  name                String
+  kategori            String
+  noTelepon           String
+  alamat              String
+  rt_rw               String
+  desa_kel            String
+  kecamatan           String
+  kabupaten           String
+  provinsi            String
+  tahunBerdiri        Int
+  usahaUtama          String
+  produkUtama         String
+  badanHukum          String
+  jumlahKaryawan      Int
+  sistemPenjualan     String
+  persaingan          Saingan
+  totalAset           Float
+  penjualanPerTahun   Float
+  proyeksiPenjualan   Float
+  kebetuhanKredit     Float
+  nilaiAsetJaminan    Float
+  jumlahDokumenKredit Float
+  description         String
+  noRekening          String
+  noNPWP              String
+  noBIP               String
+  userId              String   @unique // Menjamin satu UMKM hanya terikat pada satu akun UMKMUser
+  user                UMKMUser @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  // Relasi ke aplikasi pinjaman
+  // loanApplications LoanApplication[]
+}
+
+model LoanApplication {
+  id             String      @id @default(cuid())
+  jumlahPinjaman Float
+  tujuan         String
+  status         LoanStatus  @default(PENDING)
+  // Relasi ke data UMKM
+  // umkmId     String
+  // umkm       UMKM        @relation(fields: [umkmId], references: [id], onDelete: Cascade)
+  // Opsional, jika kamu ingin menyimpan decision dari ML service
+  mlDecision     MlDecision?
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+
+  userId String
+  user   UMKMUser @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model SRLAssessment {
+  id                String   @id @default(cuid())
+  userId            String
+  user              UMKMUser @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lamaUsahaBerjalan Int
+  jumlahKaryawan    Int
+  omzetPerTahun     Float
+  totalAset         Float
+  score             Int?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+enum LoanStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum MlDecision {
+  APPROVED
+  REJECTED
+}
+
+enum Role {
+  USER
+  SYSTEM
+  BANK
+}
+
+enum Saingan {
+  RENDAH
+  SEDANG
+  TINGGI
+}
