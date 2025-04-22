@@ -7,7 +7,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
   if (req.method === 'GET') {
     try {
-      const umkm = await prisma.umkm.findUnique({ where: { id: String(id) } })
+      const umkm = await prisma.uMKM.findUnique({ where: { id: String(id) } })
       return res.status(200).json(umkm)
     } catch (error) {
       return res.status(500).json({ message: 'Error fetching UMKM', error })
@@ -15,7 +15,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   } else if (req.method === 'PUT') {
     try {
       const updateData = req.body
-      const updated = await prisma.umkm.update({
+      const updated = await prisma.uMKM.update({
         where: { id: String(id) },
         data: updateData,
       })
@@ -25,7 +25,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     }
   } else if (req.method === 'DELETE') {
     try {
-      await prisma.umkm.delete({ where: { id: String(id) } })
+      await prisma.uMKM.delete({ where: { id: String(id) } })
       return res.status(200).json({ message: 'UMKM deleted' })
     } catch (error) {
       return res.status(500).json({ message: 'Error deleting UMKM', error })

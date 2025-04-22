@@ -41,7 +41,7 @@ export default function RegisterForm() {
         return;
       }
 
-      router.push("/auth/login");
+      router.push("/login");
     } catch (error: any) {
       if (error.errors) {
         const validationErrors: Partial<RegisterFormData> = {};

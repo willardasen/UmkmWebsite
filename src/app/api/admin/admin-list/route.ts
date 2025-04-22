@@ -1,7 +1,7 @@
 // untuk melihat list admin bank
 import { NextApiRequest, NextApiResponse } from 'next'
-import { prisma } from '../../../../prisma/client'
-import { adminOnly } from '../utils/adminOnly'
+import { prisma } from '../../../../../prisma/client'
+import { adminOnly } from '../../utils/adminOnly'
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'GET') {
