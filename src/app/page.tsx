@@ -10,7 +10,7 @@ export default function Home() {
           their business readiness.
         </p>
         <div className="flex gap-4 justify-center">
-          <Link href="/auth/login" className="btn btn-primary rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+          <Link href="/login" className="btn btn-primary rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
             Login
           </Link>
           {/* <Link href="/auth/register" className="btn btn-outline">

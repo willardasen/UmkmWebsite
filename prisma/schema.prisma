@@ -21,8 +21,6 @@ model Admin {
   role      Role     @default(BANK) 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
- 
 }
 
 model UMKMUser {
@@ -31,6 +29,7 @@ model UMKMUser {
   password  String
   name      String
   role      Role     @default(USER)
+  noTelepon String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -39,14 +38,13 @@ model UMKMUser {
   // Relasi ke Loan Applications (sebagai pemohon)
   loanApplications LoanApplication[]
   // Jika diperlukan, relasi ke SRLAssessment
-  srlAssessments   SRLAssessment[]
+  srlAssessments   SRLAssessment?
 }
 
 model UMKM {
   id                  String   @id @default(cuid())
   name                String
   kategori            String
-  noTelepon           String
   alamat              String
   rt_rw               String
   desa_kel            String
@@ -98,12 +96,12 @@ model LoanApplication {
 
 model SRLAssessment {
   id                String   @id @default(cuid())
-  userId            String
+  userId            String   @unique
   user              UMKMUser @relation(fields: [userId], references: [id], onDelete: Cascade)
   lamaUsahaBerjalan Int
   jumlahKaryawan    Int
   omzetPerTahun     Float
-  totalAset         Float
+  jumlahAset        Float
   score             Int?
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
