@@ -36,15 +36,14 @@ model UMKMUser {
   // Relasi satu-satu dengan data UMKM
   umkm             UMKM? // Opsional, karena mungkin user belum membuat data UMKM
   // Relasi ke Loan Applications (sebagai pemohon)
-  loanApplications LoanApplication[]
+  // loanApplications LoanApplication[]
   // Jika diperlukan, relasi ke SRLAssessment
-  srlAssessments   SRLAssessment?
+  // srlAssessments   SRLAssessment?
 }
 
 model UMKM {
   id                  String   @id @default(cuid())
   name                String
-  kategori            String
   alamat              String
   rt_rw               String
   desa_kel            String
@@ -52,16 +51,15 @@ model UMKM {
   kabupaten           String
   provinsi            String
   tahunBerdiri        Int
-  usahaUtama          String
+  usahaUtama          JenisUsaha
   produkUtama         String
-  badanHukum          String
+  badanHukum          NamaBadanHukum
   jumlahKaryawan      Int
-  sistemPenjualan     String
+  sistemPenjualan     SistemPenjualan
   persaingan          Saingan
   totalAset           Float
   penjualanPerTahun   Float
   proyeksiPenjualan   Float
-  kebetuhanKredit     Float
   nilaiAsetJaminan    Float
   jumlahDokumenKredit Float
   description         String
@@ -74,7 +72,8 @@ model UMKM {
   updatedAt           DateTime @updatedAt
 
   // Relasi ke aplikasi pinjaman
-  // loanApplications LoanApplication[]
+  loanApplications LoanApplication[]
+  srlAssessments   SRLAssessment?
 }
 
 model LoanApplication {
@@ -83,25 +82,27 @@ model LoanApplication {
   tujuan         String
   status         LoanStatus  @default(PENDING)
   // Relasi ke data UMKM
-  // umkmId     String
-  // umkm       UMKM        @relation(fields: [umkmId], references: [id], onDelete: Cascade)
+  umkmId     String
+  umkm       UMKM        @relation(fields: [umkmId], references: [id], onDelete: Cascade)
   // Opsional, jika kamu ingin menyimpan decision dari ML service
   mlDecision     MlDecision?
   createdAt      DateTime    @default(now())
   updatedAt      DateTime    @updatedAt
 
-  userId String
-  user   UMKMUser @relation(fields: [userId], references: [id], onDelete: Cascade)
+  // userId String
+  // user   UMKMUser @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model SRLAssessment {
   id                String   @id @default(cuid())
-  userId            String   @unique
-  user              UMKMUser @relation(fields: [userId], references: [id], onDelete: Cascade)
-  lamaUsahaBerjalan Int
-  jumlahKaryawan    Int
-  omzetPerTahun     Float
-  jumlahAset        Float
+  // userId            String   @unique
+  // user              UMKMUser @relation(fields: [userId], references: [id], onDelete: Cascade)
+  umkmId     String @unique
+  umkm       UMKM        @relation(fields: [umkmId], references: [id], onDelete: Cascade)
+  // lamaUsahaBerjalan Int
+  // jumlahKaryawan    Int
+  // omzetPerTahun     Float
+  // jumlahAset        Float
   score             Int?
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
@@ -128,4 +129,21 @@ enum Saingan {
   RENDAH
   SEDANG
   TINGGI
+}
+
+enum NamaBadanHukum {
+  PERSEORANGAN
+  CV
+}
+
+enum SistemPenjualan {
+  RETAIL
+  DISTRIBUTOR
+  RETAILDANDISTRIBUTOR
+}
+
+enum JenisUsaha {
+  MAKANAN
+  PAKAIAN
+  KERAJINAN
 }

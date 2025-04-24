@@ -7,11 +7,13 @@ declare module "next-auth" {
   interface Session {
     user: DefaultSession["user"] & {
       /** role yang kamu tambahkan di callback */
+      id: string 
       role: string
     }
   }
   interface User extends DefaultUser {
     /** pastikan user record juga punya role  */
+    id: string 
     role: string
   }
 }
@@ -20,6 +22,7 @@ declare module "next-auth" {
 declare module "next-auth/jwt" {
   interface JWT {
     /** sertakan role di token */
+    id: string 
     role: string
   }
 }

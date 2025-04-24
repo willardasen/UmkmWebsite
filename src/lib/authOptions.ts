@@ -58,12 +58,19 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     // Tambahkan field-role ke JWT
     async jwt({ token, user }) {
-      if (user) token.role = (user as any).role;
+      if (user) {
+        token.id   = user.id
+        token.role = (user as any).role
+      };
       return token;
     },
     // Sertakan role di session.user
     async session({ session, token }) {
-      session.user = { ...session.user, role: token.role as string };
+      session.user = {
+         ...session.user, 
+         id:   token.id as string,
+         role: token.role as string 
+      };
       return session;
     },
   },

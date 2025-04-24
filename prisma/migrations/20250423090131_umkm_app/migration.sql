@@ -31,7 +31,6 @@ CREATE TABLE `UMKMUser` (
 CREATE TABLE `UMKM` (
     `id` VARCHAR(191) NOT NULL,
     `name` VARCHAR(191) NOT NULL,
-    `kategori` VARCHAR(191) NOT NULL,
     `alamat` VARCHAR(191) NOT NULL,
     `rt_rw` VARCHAR(191) NOT NULL,
     `desa_kel` VARCHAR(191) NOT NULL,
@@ -39,16 +38,15 @@ CREATE TABLE `UMKM` (
     `kabupaten` VARCHAR(191) NOT NULL,
     `provinsi` VARCHAR(191) NOT NULL,
     `tahunBerdiri` INTEGER NOT NULL,
-    `usahaUtama` VARCHAR(191) NOT NULL,
+    `usahaUtama` ENUM('MAKANAN', 'PAKAIAN', 'KERAJINAN') NOT NULL,
     `produkUtama` VARCHAR(191) NOT NULL,
-    `badanHukum` VARCHAR(191) NOT NULL,
+    `badanHukum` ENUM('PERSEORANGAN', 'CV') NOT NULL,
     `jumlahKaryawan` INTEGER NOT NULL,
-    `sistemPenjualan` VARCHAR(191) NOT NULL,
+    `sistemPenjualan` ENUM('RETAIL', 'DISTRIBUTOR', 'RETAILDANDISTRIBUTOR') NOT NULL,
     `persaingan` ENUM('RENDAH', 'SEDANG', 'TINGGI') NOT NULL,
     `totalAset` DOUBLE NOT NULL,
     `penjualanPerTahun` DOUBLE NOT NULL,
     `proyeksiPenjualan` DOUBLE NOT NULL,
-    `kebetuhanKredit` DOUBLE NOT NULL,
     `nilaiAsetJaminan` DOUBLE NOT NULL,
     `jumlahDokumenKredit` DOUBLE NOT NULL,
     `description` VARCHAR(191) NOT NULL,
@@ -69,10 +67,10 @@ CREATE TABLE `LoanApplication` (
     `jumlahPinjaman` DOUBLE NOT NULL,
     `tujuan` VARCHAR(191) NOT NULL,
     `status` ENUM('PENDING', 'APPROVED', 'REJECTED') NOT NULL DEFAULT 'PENDING',
+    `umkmId` VARCHAR(191) NOT NULL,
     `mlDecision` ENUM('APPROVED', 'REJECTED') NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
-    `userId` VARCHAR(191) NOT NULL,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -80,16 +78,12 @@ CREATE TABLE `LoanApplication` (
 -- CreateTable
 CREATE TABLE `SRLAssessment` (
     `id` VARCHAR(191) NOT NULL,
-    `userId` VARCHAR(191) NOT NULL,
-    `lamaUsahaBerjalan` INTEGER NOT NULL,
-    `jumlahKaryawan` INTEGER NOT NULL,
-    `omzetPerTahun` DOUBLE NOT NULL,
-    `jumlahAset` DOUBLE NOT NULL,
+    `umkmId` VARCHAR(191) NOT NULL,
     `score` INTEGER NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
 
-    UNIQUE INDEX `SRLAssessment_userId_key`(`userId`),
+    UNIQUE INDEX `SRLAssessment_umkmId_key`(`umkmId`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -97,7 +91,7 @@ CREATE TABLE `SRLAssessment` (
 ALTER TABLE `UMKM` ADD CONSTRAINT `UMKM_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `UMKMUser`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `LoanApplication` ADD CONSTRAINT `LoanApplication_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `UMKMUser`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `LoanApplication` ADD CONSTRAINT `LoanApplication_umkmId_fkey` FOREIGN KEY (`umkmId`) REFERENCES `UMKM`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `SRLAssessment` ADD CONSTRAINT `SRLAssessment_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `UMKMUser`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `SRLAssessment` ADD CONSTRAINT `SRLAssessment_umkmId_fkey` FOREIGN KEY (`umkmId`) REFERENCES `UMKM`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;

@@ -1,100 +1,75 @@
+// src/components/Navbar.tsx
 "use client";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useSession, signOut } from "next-auth/react";
 
-const Navbar = () => {
+type NavItem = { label: string; href: string };
+
+export default function Navbar() {
+  const { data: session } = useSession();
   const pathname = usePathname();
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const role = session?.user?.role;
 
-  const navLinks = [
-    { href: "/", label: "UMKM List" },
-    { href: "/loan-application", label: "Loan Application" },
-    { href: "/startup-readiness", label: "Startup Readiness" },
-  ];
+  let items: NavItem[] = [];
+
+  if (role === "USER") {
+    items = [
+      { label: "List UMKM", href: "/" },
+      { label: "Request Fund", href: "/dashboard/loans" },
+    ];
+  } else if (role === "BANK") {
+    items = [
+      { label: "Dashboard", href: "/admin/bank-dashboard" },
+      { label: "List UMKM", href: "/admin/umkm-list" },
+    ];
+  } else if (role === "SYSTEM") {
+    items = [
+      { label: "System Dashboard", href: "/admin/system-dashboard" },
+      { label: "Manage Admins", href: "/admin/list-admins" },
+    ];
+  }
 
   return (
-    <div className="navbar bg-base-100 shadow-lg">
-      <div className="navbar-start">
-        <div className="dropdown">
-          <label tabIndex={0} className="btn btn-ghost lg:hidden">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
+    <nav className="bg-blue-600 text-white px-6 py-3 flex items-center justify-between">
+      <div className="flex space-x-4">
+        <span className="font-bold">Welcome{session ? `, ${session.user.name}` : ""}</span>
+        {items.map((item) => (
+          <Link
+            key={item.href}
+            href={item.href}
+            className={`px-3 py-1 rounded hover:bg-blue-500 ${
+              pathname === item.href ? "bg-blue-500" : ""
+            }`}
+          >
+            {item.label}
+          </Link>
+        ))}
+      </div>
+      <div className="flex items-center space-x-4">
+        {session ? (
+          <>
+            <button
+              onClick={() => signOut({ callbackUrl: "/login" })}
+              className="px-3 py-1 border border-white rounded hover:bg-blue-500"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M4 6h16M4 12h8m-8 6h16"
+              Sign Out
+            </button>
+            <Link href={role === "admin" ? "/admin/profile" : "/profile"}>
+              <img
+                src="/avatar-placeholder.png"
+                alt="Avatar"
+                className="w-8 h-8 rounded-full"
               />
-            </svg>
-          </label>
-          <ul
-            tabIndex={0}
-            className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
-          >
-            {navLinks.map((link) => (
-              <li key={link.href}>
-                <Link
-                  href={link.href}
-                  className={pathname === link.href ? "active" : ""}
-                >
-                  {link.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-        <Link href="/" className="btn btn-ghost normal-case text-xl">
-          UMKM Loan System
-        </Link>
+            </Link>
+          </>
+        ) : (
+          <Link href="/login" className="px-3 py-1 border border-white rounded hover:bg-blue-500">
+            Sign In
+          </Link>
+        )}
       </div>
-      <div className="navbar-center hidden lg:flex">
-        <ul className="menu menu-horizontal px-1">
-          {navLinks.map((link) => (
-            <li key={link.href}>
-              <Link
-                href={link.href}
-                className={pathname === link.href ? "active" : ""}
-              >
-                {link.label}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </div>
-      <div className="navbar-end">
-        <div className="dropdown dropdown-end">
-          <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
-            <div className="w-10 rounded-full">
-              <img src="/default-avatar.png" alt="User Avatar" />
-            </div>
-          </label>
-          <ul
-            tabIndex={0}
-            className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52"
-          >
-            <li>
-              <Link href="/profile" className="justify-between">
-                Profile
-              </Link>
-            </li>
-            <li>
-              <Link href="/auth/login">Login</Link>
-            </li>
-            <li>
-              <Link href="/auth/register">Register</Link>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </div>
+    </nav>
   );
-};
-
-export default Navbar;
+}
