@@ -17,7 +17,7 @@ export default async function UmkmListPage() {
       tahunBerdiri: true,
     },
   });
-
+// kalo bisa yang bagian link pake use router 
   return (
     <div className="p-6">
       <h1 className="text-2xl font-semibold mb-4">Daftar UMKM</h1>

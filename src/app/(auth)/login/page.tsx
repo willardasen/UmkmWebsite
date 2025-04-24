@@ -71,9 +71,9 @@ export default function LoginForm() {
     const session = await getSession();
     const actualRole = session?.user?.role;
     if (actualRole === "SYSTEM") {
-      router.push("/tes/system"); //ganti
+      router.push("/umkm-list"); //ganti
     } else {
-      router.push("/tes/bank"); //ganti
+      router.push("/umkm-list"); //ganti
     }
   };
 

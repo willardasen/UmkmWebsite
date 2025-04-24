@@ -80,8 +80,10 @@ export async function POST(req: NextRequest) {
         user: { connect: { id: session.user.id } },
       },
     });
+    console.log("SESSION", session.user);
 
     return NextResponse.json(newUmkm, { status: 201 });
+    
   } catch (err: any) {
     return NextResponse.json(
       { message: "Failed to create UMKM", error: err.message },

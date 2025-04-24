@@ -18,12 +18,12 @@ export default function Navbar() {
   if (role === "USER") {
     items = [
       { label: "List UMKM", href: "/umkm-list" },
-      { label: "Request Fund", href: "/loan-application" },
+      { label: "Request Fund", href: "/dashboard/loans" },
     ];
   } else if (role === "BANK") {
     items = [
       { label: "Dashboard", href: "/admin/bank-dashboard" },
-      { label: "List UMKM", href: "/admin/umkm-list" },
+      { label: "List UMKM", href: "/umkm-list" },
     ];
   } else if (role === "SYSTEM") {
     items = [
@@ -31,6 +31,8 @@ export default function Navbar() {
       { label: "Manage Admins", href: "/admin/list-admins" },
     ];
   }
+
+  const isAdmin = role === "BANK" || role === "SYSTEM";
 
   return (
     <nav className="bg-blue-600 text-white px-6 py-3 flex items-center justify-between">
@@ -57,8 +59,8 @@ export default function Navbar() {
             >
               Sign Out
             </button>
-            <Link href={role === "admin" ? "/admin/profile" : "/profile"}>
-              <CgProfile size={30}/>
+            <Link href={isAdmin ? "/admin/profile" : "/profile"}>
+              <CgProfile size={30} />
             </Link>
           </>
         ) : (
