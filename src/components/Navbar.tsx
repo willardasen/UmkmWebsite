@@ -4,6 +4,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
+import { CgProfile } from "react-icons/cg";
 
 type NavItem = { label: string; href: string };
 
@@ -16,8 +17,8 @@ export default function Navbar() {
 
   if (role === "USER") {
     items = [
-      { label: "List UMKM", href: "/" },
-      { label: "Request Fund", href: "/dashboard/loans" },
+      { label: "List UMKM", href: "/umkm-list" },
+      { label: "Request Fund", href: "/loan-application" },
     ];
   } else if (role === "BANK") {
     items = [
@@ -57,11 +58,7 @@ export default function Navbar() {
               Sign Out
             </button>
             <Link href={role === "admin" ? "/admin/profile" : "/profile"}>
-              <img
-                src="/avatar-placeholder.png"
-                alt="Avatar"
-                className="w-8 h-8 rounded-full"
-              />
+              <CgProfile size={30}/>
             </Link>
           </>
         ) : (

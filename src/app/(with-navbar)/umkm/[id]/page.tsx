@@ -1,4 +1,3 @@
-
 // src/app/(with-navbar)/umkm/[id]/page.tsx
 import { notFound } from "next/navigation";
 import { prisma } from "../../../../../prisma/client";
@@ -18,7 +17,8 @@ export default async function UmkmDetailPage({
     <div className="max-w-xl mx-auto p-6 bg-white shadow rounded mt-8">
       <h1 className="text-2xl font-semibold mb-2">Profil UMKM</h1>
       <p className="mb-6 text-gray-700">
-        Profil usaha mikro, kecil, dan menengah yang potensial dibiayai oleh bank
+        Profil usaha mikro, kecil, dan menengah yang potensial dibiayai oleh
+        bank
       </p>
 
       <dl className="space-y-4">
@@ -50,6 +50,11 @@ export default async function UmkmDetailPage({
         <div>
           <dt className="font-medium text-gray-600">Alamat</dt>
           <dd className="text-lg">{umkm.alamat}</dd>
+        </div>
+
+        <div>
+          <dt className="font-medium text-gray-600">Produk Utama</dt>
+          <dd className="text-lg">{umkm.usahaUtama}</dd>
         </div>
 
         <div>

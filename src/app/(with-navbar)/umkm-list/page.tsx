@@ -9,6 +9,7 @@ export default async function UmkmListPage() {
       id: true,
       name: true,
       user: { select: { name: true } },
+      usahaUtama: true,
       produkUtama: true,
       totalAset: true,
       penjualanPerTahun: true,
@@ -27,6 +28,7 @@ export default async function UmkmListPage() {
               <th className="px-4 py-2 text-left">No.</th>
               <th className="px-4 py-2 text-left">Nama Perusahaan / Pengusaha</th>
               <th className="px-4 py-2 text-left">Produk Utama</th>
+              <th className="px-4 py-2 text-left">Usaha Utama</th>
               <th className="px-4 py-2 text-right">Total Aset (Rp. Juta)</th>
               <th className="px-4 py-2 text-right">Penj. per Thn (Rp. Juta)</th>
               <th className="px-4 py-2 text-right">Jml. Tenaga Kerja</th>
@@ -49,6 +51,7 @@ export default async function UmkmListPage() {
                   </Link>
                 </td>
                 <td className="px-4 py-2">{u.produkUtama}</td>
+                <td className="px-4 py-2">{u.usahaUtama}</td>
                 <td className="px-4 py-2 text-right">{u.totalAset}</td>
                 <td className="px-4 py-2 text-right">{u.penjualanPerTahun}</td>
                 <td className="px-4 py-2 text-right">{u.jumlahKaryawan}</td>

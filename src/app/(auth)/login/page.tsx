@@ -63,7 +63,7 @@ export default function LoginForm() {
 
     // 3) Redirect
     if (role === "user") {
-      router.push("/tes/umkm"); //ganti
+      router.push("/umkm-list"); //ganti
       return;
     }
 
