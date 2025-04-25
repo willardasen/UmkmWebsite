@@ -85,6 +85,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(newUmkm, { status: 201 });
     
   } catch (err: any) {
+    console.error("UMKM CREATE ERROR", err);
     return NextResponse.json(
       { message: "Failed to create UMKM", error: err.message },
       { status: 500 }

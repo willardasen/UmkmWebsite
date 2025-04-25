@@ -34,6 +34,9 @@ const defaultFields: Record<string, string> = {
   nilaiAsetJaminan: "",
   jumlahDokumenKredit: "",
   description: "",
+  noRekening:"",
+  noNPWP:"",
+  noBIP:""
 };
 
 // Field enum dan opsinya
