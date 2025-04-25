@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getServerSession }      from "next-auth/next";
-import { authOptions }           from "@/lib/authOptions";
-import { prisma }                from "../../../../../prisma/client";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "@/lib/authOptions";
+import { prisma } from "../../../../../prisma/client";
 
 function scoreLamaUsaha(years: number) {
   if (years < 2) return 1;

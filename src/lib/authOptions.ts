@@ -28,24 +28,44 @@ export const authOptions: NextAuthOptions = {
       },
       async authorize(credentials) {
         const { email, password, role } = credentials!;
-        // Pilih model sesuai role
+      
+        // 1. Ambil user dari DB sesuai role yang dipilih di frontend
         const userRecord =
           role === "admin"
             ? await prisma.admin.findUnique({ where: { email } })
             : await prisma.uMKMUser.findUnique({ where: { email } });
-
-        if (!userRecord) return null;
+      
+        // 2. Jika user tidak ditemukan
+        if (!userRecord) {
+          throw new Error("Email atau password salah");
+        }
+      
+        // 3. Cek password
         const isValid = await bcrypt.compare(password, userRecord.password);
-        if (!isValid) return null;
-
-        // Return user object; fields akan masuk ke token/session
+        if (!isValid) {
+          throw new Error("Email atau password salah");
+        }
+      
+        // 4. Verifikasi role yang sebenarnya
+        const actualRole = role === "admin" ? (userRecord as any).role : "USER";
+      
+        // 5. Cek kecocokan antara role yang dipilih dan yang sebenarnya
+        if (role === "admin" && (actualRole !== "SYSTEM" && actualRole !== "BANK")) {
+          throw new Error("Akun ini bukan admin");
+        }
+      
+        if (role === "user" && actualRole !== "USER") {
+          throw new Error("Akun ini bukan user UMKM");
+        }
+      
+        // 6. Return data user yang sah
         return {
           id: userRecord.id,
           email: userRecord.email,
-          role: role === "admin" ? userRecord.role : "USER",
+          role: actualRole,
           name: (userRecord as any).name,
         };
-      },
+      }
     }),
 
     // 2) (Optional) Google OAuth

@@ -19,6 +19,7 @@ export default function Navbar() {
     items = [
       { label: "List UMKM", href: "/umkm-list" },
       { label: "Request Fund", href: "/dashboard/loans" },
+      { label: "SRL score", href: "/srl" },
     ];
   } else if (role === "BANK") {
     items = [

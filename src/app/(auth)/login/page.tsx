@@ -34,8 +34,7 @@ export default function LoginForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    // 1) Validasi lokal dengan Zod
+  
     try {
       loginSchema.parse(formData);
       setErrors({});
@@ -47,35 +46,33 @@ export default function LoginForm() {
       setErrors(fieldErrors);
       return;
     }
-
-    // 2) Sign in via NextAuth Credentials
+  
     const result = await signIn("credentials", {
       redirect: false,
       email: formData.email,
       password: formData.password,
-      role,                         // dibaca oleh authorize()
+      role,
     });
-
+  
     if (result?.error) {
       setServerError(result.error);
       return;
     }
-
-    // 3) Redirect
-    if (role === "user") {
-      router.push("/umkm-list"); //ganti
-      return;
-    }
-
-    // 4) Untuk admin, cek actual role dari session
+  
     const session = await getSession();
     const actualRole = session?.user?.role;
-    if (actualRole === "SYSTEM") {
-      router.push("/umkm-list"); //ganti
+  
+    if (role === "user" && actualRole === "USER") {
+      router.push("/umkm-list");
+    } else if (role === "admin" && actualRole === "SYSTEM") {
+      router.push("/umkm-list");
+    } else if (role === "admin" && actualRole === "BANK") {
+      router.push("/umkm-list");
     } else {
-      router.push("/umkm-list"); //ganti
+      setServerError("Terjadi kesalahan role tidak cocok.");
     }
   };
+  
 
   return (
     <form

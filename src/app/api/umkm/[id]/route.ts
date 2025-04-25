@@ -15,7 +15,7 @@ export async function GET(
     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
   }
 
-  const umkm = await prisma.uMKM.findUnique({ where: { id: params.id } });
+  const umkm = await prisma.uMKM.findUnique({ where: { userId: params.id } });
   if (!umkm) return NextResponse.json({ message: "Not found" }, { status: 404 });
   return NextResponse.json(umkm);
 }
