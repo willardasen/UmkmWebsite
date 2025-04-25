@@ -9,18 +9,27 @@ export default function SRLPage() {
   const [score, setScore] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
 
-  // Ambil data UMKM berdasarkan user.id
+  // Ambil data UMKM & score SRL
   useEffect(() => {
-    async function fetchUmkm() {
+    async function fetchData() {
       if (!session?.user?.id) return;
-      const res = await fetch(`/api/umkm/${session.user.id}`);
-      if (res.ok) {
-        const data = await res.json();
+
+      // Ambil data UMKM
+      const resUmkm = await fetch(`/api/umkm/${session.user.id}`);
+      if (resUmkm.ok) {
+        const data = await resUmkm.json();
         setUmkm(data);
+
+        // Setelah dapat UMKM, fetch SRL berdasarkan ID UMKM
+        const resSRL = await fetch(`/api/srl/${data.id}`);
+        if (resSRL.ok) {
+          const srlData = await resSRL.json();
+          setScore(srlData.score);
+        }
       }
     }
 
-    fetchUmkm();
+    fetchData();
   }, [session]);
 
   // Submit form SRL
@@ -31,7 +40,7 @@ export default function SRLPage() {
     });
     if (res.ok) {
       const data = await res.json();
-      setScore(data.score);
+      setScore(data.score); // update score setelah dihitung ulang
     }
     setLoading(false);
   }

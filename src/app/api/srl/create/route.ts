@@ -69,8 +69,10 @@ export async function POST(req: NextRequest) {
   else if (total >= 9) srl = 6;
   else srl = 5;
 
-  const created = await prisma.sRLAssessment.create({
-    data: { umkmId: umkm.id, score: srl },
+  const created = await prisma.sRLAssessment.upsert({
+    where: { umkmId: umkm.id },
+    update: { score: srl },
+    create: { umkmId: umkm.id, score: srl },
   });
   return NextResponse.json(created, { status: 201 });
 }
