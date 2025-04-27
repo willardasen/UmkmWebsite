@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { loanSchema, type LoanFormData } from "@/lib/validations/umkm";
+import { toast } from "react-hot-toast";
 
 export default function LoanApplication() {
   const router = useRouter();
@@ -11,6 +12,7 @@ export default function LoanApplication() {
     purpose: "",
   });
   const [errors, setErrors] = useState<Partial<LoanFormData>>({});
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -20,7 +22,7 @@ export default function LoanApplication() {
       ...prev,
       [name]: name === "amount" ? parseFloat(value) || 0 : value,
     }));
-    // Clear error when user starts typing
+
     if (errors[name as keyof LoanFormData]) {
       setErrors((prev) => ({ ...prev, [name]: undefined }));
     }
@@ -28,69 +30,83 @@ export default function LoanApplication() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
 
     try {
-      // Validate form data
       loanSchema.parse(formData);
 
-      // TODO: Submit form data to API
-      console.log("Form data:", formData);
+      const res = await fetch("/api/loan/apply", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          jumlahPinjaman: formData.amount,
+          tujuan: formData.purpose,
+        }),
+      });
 
-      // Redirect to dashboard
-      router.push("/dashboard");
-    } catch (error) {
-      if (error instanceof Error) {
-        // Handle validation errors
-        const validationErrors: Partial<LoanFormData> = {};
-        JSON.parse(error.message).forEach((err: any) => {
-          validationErrors[err.path[0] as keyof LoanFormData] = err.message;
-        });
-        setErrors(validationErrors);
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.message || "Failed to apply for loan");
       }
+
+      toast.success("Loan application submitted!");
+      router.push("/loan-list");
+    } catch (error) {
+      console.error(error);
+      if (error instanceof Error) {
+        toast.error(error.message);
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="max-w-2xl mx-auto">
-      <h1 className="text-3xl font-bold mb-6">Loan Application</h1>
+    <div className="max-w-xl mx-auto bg-white shadow-lg rounded-2xl p-8 mt-10 border border-gray-200">
+      <h1 className="text-3xl font-bold text-center mb-8">Apply for a Loan</h1>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="form-control">
-          <label className="label">
-            <span className="label-text">Loan Amount (IDR)</span>
-          </label>
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="flex flex-col gap-2">
+          <label className="text-md font-medium">Amount of Fund (IDR)</label>
           <input
             type="number"
             name="amount"
-            className="input input-bordered"
-            value={formData.amount}
+            value={formData.amount || ""}
             onChange={handleChange}
+            className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="e.g. 10000000"
             min="0"
             step="1000000"
+            required
           />
           {errors.amount && (
-            <span className="text-error text-sm">{errors.amount}</span>
+            <p className="text-red-500 text-sm">{errors.amount}</p>
           )}
         </div>
 
-        <div className="form-control">
-          <label className="label">
-            <span className="label-text">Purpose of Loan</span>
-          </label>
+        <div className="flex flex-col gap-2">
+          <label className="text-md font-medium">Purpose of Fund</label>
           <textarea
             name="purpose"
-            className="textarea textarea-bordered h-24"
             value={formData.purpose}
             onChange={handleChange}
+            className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Describe why you need this loan..."
+            rows={5}
+            required
           />
           {errors.purpose && (
-            <span className="text-error text-sm">{errors.purpose}</span>
+            <p className="text-red-500 text-sm">{errors.purpose}</p>
           )}
         </div>
 
-        <div className="form-control mt-6">
-          <button type="submit" className="btn btn-primary">
-            Submit Application
+        <div className="flex justify-end">
+          <button
+            type="submit"
+            className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:scale-105 transition-transform duration-300 disabled:bg-blue-300"
+            disabled={loading}
+          >
+            {loading ? "Submitting..." : "Submit"}
           </button>
         </div>
       </form>

@@ -1,26 +1,97 @@
-// src/app/(with-navbar)/umkm-list/page.tsx
-import Link from "next/link";
-import { prisma } from "../../../../prisma/client";
+"use client";
 
-export default async function UmkmListPage() {
-  const umkms = await prisma.uMKM.findMany({
-    orderBy: { createdAt: "desc" },
-    select: {
-      id: true,
-      name: true,
-      user: { select: { name: true } },
-      usahaUtama: true,
-      produkUtama: true,
-      totalAset: true,
-      penjualanPerTahun: true,
-      jumlahKaryawan: true,
-      tahunBerdiri: true,
-    },
-  });
-// kalo bisa yang bagian link pake use router 
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+
+type Umkm = {
+  id: string;
+  name: string;
+  user: { name: string };
+  usahaUtama: string;
+  produkUtama: string;
+  totalAset: number;
+  penjualanPerTahun: number;
+  jumlahKaryawan: number;
+  tahunBerdiri: number;
+};
+
+export default function UmkmListPage() {
+  const [umkms, setUmkms] = useState<Umkm[]>([]);
+  const [filtered, setFiltered] = useState<Umkm[]>([]);
+  const [search, setSearch] = useState("");
+  const [sort, setSort] = useState<"asc" | "desc">("desc");
+  const [filterYear, setFilterYear] = useState<number | null>(null);
+  const router = useRouter();
+
+  useEffect(() => {
+    async function fetchData() {
+      const res = await fetch("/api/umkm/all");
+      const data = await res.json();
+      setUmkms(data);
+      setFiltered(data);
+    }
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    let data = [...umkms];
+
+    // Filter by search text
+    if (search) {
+      const q = search.toLowerCase();
+      data = data.filter(
+        (u) =>
+          u.name.toLowerCase().includes(q) ||
+          u.user.name.toLowerCase().includes(q) ||
+          u.usahaUtama.toLowerCase().includes(q) ||
+          u.produkUtama.toLowerCase().includes(q)
+      );
+    }
+
+    // Filter by tahun berdiri
+    if (filterYear) {
+      data = data.filter((u) => u.tahunBerdiri === filterYear);
+    }
+
+    // Sort
+    data.sort((a, b) =>
+      sort === "asc"
+        ? a.tahunBerdiri - b.tahunBerdiri
+        : b.tahunBerdiri - a.tahunBerdiri
+    );
+
+    setFiltered(data);
+  }, [search, sort, filterYear, umkms]);
+
   return (
     <div className="p-6">
       <h1 className="text-2xl font-semibold mb-4">Daftar UMKM</h1>
+
+      <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-4">
+        <input
+          type="text"
+          placeholder="🔍 Cari UMKM..."
+          className="flex-1 p-2 border border-gray-300 rounded"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+        <select
+          className="p-2 border border-gray-300 rounded"
+          value={sort}
+          onChange={(e) => setSort(e.target.value as "asc" | "desc")}
+        >
+          <option value="desc">⬇️ Tahun Paling Baru</option>
+          <option value="asc">⬆️ Tahun Paling Lama</option>
+        </select>
+        <input
+          type="number"
+          placeholder="🎯 Filter Tahun"
+          className="p-2 border border-gray-300 rounded w-36"
+          value={filterYear ?? ""}
+          onChange={(e) => setFilterYear(e.target.value ? +e.target.value : null)}
+        />
+      </div>
+
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white shadow rounded">
           <thead className="bg-blue-600 text-white">
@@ -36,19 +107,14 @@ export default async function UmkmListPage() {
             </tr>
           </thead>
           <tbody>
-            {umkms.map((u, i) => (
-              <tr
-                key={u.id}
-                className={i % 2 === 0 ? "bg-gray-50" : "bg-white"}
-              >
+            {filtered.map((u, i) => (
+              <tr key={u.id} className={i % 2 === 0 ? "bg-gray-50" : "bg-white"}>
                 <td className="px-4 py-2">{i + 1}</td>
-                <td className="px-4 py-2">
-                  <Link
-                    href={`/umkm/${u.id}`}
-                    className="text-blue-600 hover:underline"
-                  >
-                    {u.name} / {u.user.name}
-                  </Link>
+                <td
+                  className="px-4 py-2 text-blue-600 hover:underline cursor-pointer"
+                  onClick={() => router.push(`/umkm/${u.id}`)}
+                >
+                  {u.name} / {u.user.name}
                 </td>
                 <td className="px-4 py-2">{u.produkUtama}</td>
                 <td className="px-4 py-2">{u.usahaUtama}</td>
