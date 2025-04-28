@@ -23,13 +23,13 @@ export default function Navbar() {
     ];
   } else if (role === "BANK") {
     items = [
-      { label: "Dashboard", href: "/admin/bank-dashboard" },
       { label: "List UMKM", href: "/umkm-list" },
+      { label: "List Peminjaman UMKM", href: "/all-loan-list" },
     ];
   } else if (role === "SYSTEM") {
     items = [
-      { label: "System Dashboard", href: "/admin/system-dashboard" },
-      { label: "Manage Admins", href: "/admin/list-admins" },
+      { label: "List UMKM", href: "/umkm-list" },
+      { label: "Manage Admins", href: "/admin-bank-list" },
     ];
   }
 
