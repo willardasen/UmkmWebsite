@@ -50,7 +50,7 @@ export default function LoanApplication() {
       }
 
       toast.success("Loan application submitted!");
-      router.push("/loan-list");
+      router.push("/loan-application/loan-list");
     } catch (error) {
       console.error(error);
       if (error instanceof Error) {

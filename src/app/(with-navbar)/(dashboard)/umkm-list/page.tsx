@@ -112,7 +112,7 @@ export default function UmkmListPage() {
                 <td className="px-4 py-2">{i + 1}</td>
                 <td
                   className="px-4 py-2 text-blue-600 hover:underline cursor-pointer"
-                  onClick={() => router.push(`/umkm-details/${u.id}`)}
+                  onClick={() => router.push(`umkm-list/umkm-details/${u.id}`)}
                 >
                   {u.name} / {u.user.name}
                 </td>

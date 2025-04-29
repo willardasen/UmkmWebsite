@@ -2,7 +2,7 @@ import { getServerSession } from "next-auth/next";
 import { redirect } from "next/navigation";
 import { authOptions } from "@/lib/authOptions";
 import { prisma } from "../../../../prisma/client";
-import AdminProfileClient from "@/components/AdminProfileClient"; // 👈 kita buat komponen client terpisah
+import AdminProfileClient from "@/components/AdminProfileClient";
 
 export default async function AdminProfilePage() {
   const session = await getServerSession(authOptions);

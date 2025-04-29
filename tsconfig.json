@@ -23,6 +23,6 @@
     },
     "typeRoots": ["./node_modules/@types", "./src/types"]
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/(with-navbar)/umkm-details/[id]"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/(with-navbar)/(dashboard)/umkm-list/umkm-details/[id]"],
   "exclude": ["node_modules"]
 }

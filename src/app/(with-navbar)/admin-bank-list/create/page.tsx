@@ -83,7 +83,7 @@ export default function CreateAdminBankPage() {
         <div className="flex justify-end gap-2">
           <button
             type="button"
-            onClick={() => router.push("/admin-bank-list")}
+            onClick={() => router.push("/admin-bank-list")} //ini nanti blh di hapus
             className="px-4 py-2 border rounded"
           >
             Cancel

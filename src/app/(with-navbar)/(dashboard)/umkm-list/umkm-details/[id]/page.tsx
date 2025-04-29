@@ -1,6 +1,6 @@
 // src/app/(with-navbar)/umkm/[id]/page.tsx
 import { notFound } from "next/navigation";
-import { prisma } from "../../../../../prisma/client";
+import { prisma } from "../../../../../../../prisma/client";
 
 export default async function UmkmDetailPage({
   params,
