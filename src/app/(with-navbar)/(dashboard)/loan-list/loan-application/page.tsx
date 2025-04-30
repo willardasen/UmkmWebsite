@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { loanSchema, type LoanFormData } from "@/lib/validations/umkm";
+import { loanSchema, type LoanFormData } from "@/lib/validations/loan";
 import { toast } from "react-hot-toast";
 
 export default function LoanApplication() {

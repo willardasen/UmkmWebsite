@@ -82,8 +82,8 @@ export default function ProfileEditDialog({
                 className="px-4 py-2 bg-blue-600 text-white rounded flex items-center justify-center gap-2 min-w-[100px]"
                 disabled={loading}
                 >
-                {loading && <FaSpinner className="animate-spin h-4 w-4" />}
                 {loading ? "Saving..." : "Save"}
+                {loading && <FaSpinner className="animate-spin h-4 w-4" />}
             </button>
 
           </div>

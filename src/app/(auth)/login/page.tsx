@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { signIn, getSession } from "next-auth/react";
 import { loginSchema, LoginFormData } from "@/lib/validations/auth";
 import ErrorMessage from "@/components/ErrorMessage";
+import { FaSpinner } from "react-icons/fa";
 import Link from "next/link";
 
 export default function LoginForm() {
@@ -17,24 +18,22 @@ export default function LoginForm() {
   const [role, setRole] = useState<"user" | "admin">("user");
   const [errors, setErrors] = useState<Partial<LoginFormData>>({});
   const [serverError, setServerError] = useState<string>("");
+  const [loading, setLoading] = useState(false);
 
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
-    setErrors(prev => ({ ...prev, [e.target.name]: undefined }));
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    setErrors((prev) => ({ ...prev, [e.target.name]: undefined }));
     setServerError("");
   };
 
-  const handleRoleChange = (
-    e: React.ChangeEvent<HTMLSelectElement>
-  ) => {
+  const handleRoleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setRole(e.target.value as "user" | "admin");
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-  
+    setLoading(true);
+
     try {
       loginSchema.parse(formData);
       setErrors({});
@@ -46,22 +45,22 @@ export default function LoginForm() {
       setErrors(fieldErrors);
       return;
     }
-  
+
     const result = await signIn("credentials", {
       redirect: false,
       email: formData.email,
       password: formData.password,
       role,
     });
-  
+
     if (result?.error) {
       setServerError(result.error);
       return;
     }
-  
+
     const session = await getSession();
     const actualRole = session?.user?.role;
-  
+
     if (role === "user" && actualRole === "USER") {
       router.push("/umkm-list");
     } else if (role === "admin" && actualRole === "SYSTEM") {
@@ -71,8 +70,9 @@ export default function LoginForm() {
     } else {
       setServerError("Terjadi kesalahan role tidak cocok.");
     }
+
+    setLoading(false);
   };
-  
 
   return (
     <form
@@ -126,12 +126,16 @@ export default function LoginForm() {
         <p className="text-red-600 text-sm mb-4">{serverError}</p>
       )}
 
-      <button
-        type="submit"
-        className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
-      >
-        Sign in as {role === "admin" ? "Admin" : "User"}
-      </button>
+    <button
+      type="submit"
+      disabled={loading}
+      className={`w-full bg-blue-600 text-white py-2 rounded transition flex items-center justify-center gap-2 
+        ${loading ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-700"}`
+      }
+    >
+      {loading ? "Signing in..." : `Sign in as ${role === "admin" ? "Admin" : "User"}`}
+      {loading && <FaSpinner className="animate-spin h-4 w-4" />}
+    </button>
 
       <p className="text-center text-sm text-gray-600 mt-4">
         Belum punya akun?{" "}

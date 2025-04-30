@@ -4,6 +4,8 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { registerSchema, RegisterFormData } from "@/lib/validations/auth";
 import ErrorMessage from "@/components/ErrorMessage";
+import { FaSpinner } from "react-icons/fa";
+import Link from "next/link";
 
 export default function RegisterForm() {
   const [formData, setFormData] = useState<RegisterFormData>({
@@ -17,6 +19,7 @@ export default function RegisterForm() {
   const [errors, setErrors] = useState<Partial<RegisterFormData>>({});
   const [serverError, setServerError] = useState("");
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -25,6 +28,7 @@ export default function RegisterForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
 
     try {
       registerSchema.parse(formData);
@@ -51,6 +55,8 @@ export default function RegisterForm() {
         setErrors(validationErrors);
       }
     }
+
+    setLoading(false);
   };
 
   return (
@@ -119,9 +125,23 @@ export default function RegisterForm() {
 
       {serverError && <p className="text-red-600 text-sm">{serverError}</p>}
 
-      <button type="submit" className="mt-4 w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">
-        Sign up
+      <button 
+      type="submit" 
+      disabled = {loading}
+      className={`w-full bg-blue-600 text-white py-2 rounded transition flex items-center justify-center gap-2 
+        ${loading ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-700"}`
+      }
+      >
+        {loading ? "Registering..." : "Sign up"}
+        {loading && <FaSpinner className="animate-spin h-4 w-4" />}
       </button>
+
+      <p className="text-center text-sm text-gray-600 mt-4">
+        Sudah punya akun?{" "}
+        <Link href="/login" className="text-blue-600 hover:underline">
+          Login sekarang
+        </Link>
+      </p>
     </form>
   );
 }

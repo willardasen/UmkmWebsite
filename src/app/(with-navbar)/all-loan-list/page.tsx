@@ -54,7 +54,7 @@ export default function UMKMRequestListPage() {
             </div>
 
             <Link
-              href={`/(with-navbar)/umkm/${req.id}`}
+              href={`/approve-loan/${req.id}`}
               className="btn btn-primary rounded-full"
             >
               View
