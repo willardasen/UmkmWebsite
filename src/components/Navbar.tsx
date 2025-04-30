@@ -24,7 +24,9 @@ export default function Navbar() {
   } else if (role === "BANK") {
     items = [
       { label: "List UMKM", href: "/umkm-list" },
-      { label: "List Peminjaman UMKM", href: "/all-loan-list" },
+      { label: "List Peminjaman UMKM (Pending)", href: "/all-loan-list-pending" },
+      { label: "List Peminjaman UMKM (Accepted)", href: "/all-loan-list-accepted" },
+      { label: "List Peminjaman UMKM (Rejected)", href: "/all-loan-list-rejected" },
     ];
   } else if (role === "SYSTEM") {
     items = [
