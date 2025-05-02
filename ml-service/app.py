@@ -31,6 +31,9 @@ cluster_to_eligible = {
     1: "APPROVED",   # Eligible
     2: "REJECTED"    # Not Eligible
 }
+@app.route('/', methods=['GET'])
+def appRun():
+    return jsonify({"message": "ML Service is running."})
 
 # ================================================================
 # 🔹 Endpoint utama: /predict
@@ -41,6 +44,10 @@ def predict():
     try:
         # Ambil data input dari request JSON
         data = request.get_json()
+         # Cek apakah semua fitur tersedia
+        missing = [f for f in features if f not in data]
+        if missing:
+            return jsonify({'error': f'Missing features: {missing}'}), 400
 
         # Konversi ke DataFrame dan urutkan kolom sesuai fitur training
         df = pd.DataFrame([data])[features]
@@ -52,17 +59,18 @@ def predict():
         cluster_pred = model.predict(df_scaled)[0]
 
         # Mapping ke status eligibility
-        eligible = cluster_to_eligible.get(cluster_pred, 0)
+        eligible = cluster_to_eligible.get(cluster_pred, "REJECTED")
 
         # Return hasil sebagai JSON
         return jsonify({
             'predicted_cluster': int(cluster_pred),
-            'eligible': int(eligible)
+            'eligible': eligible
         })
 
     except Exception as e:
         # Jika ada error, kirim response error
-        return jsonify({'error': str(e)}), 400
+        return jsonify({'error': str(e)}), 500
+    
 
 # ================================================================
 # 🔹 Main entry point untuk menjalankan server

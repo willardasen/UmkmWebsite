@@ -1,107 +1,237 @@
-import { notFound } from "next/navigation";
-import Link from "next/link";
+"use client";
 
-interface LoanDetail {
-  id: string;
-  tujuan: string;
-  jumlahPinjaman: number;
-  umkm: {
-    id: string;
-    name: string;
-    noRekening: string;
-    alamat: string;
-    rt_rw: string;
-    desa_kel: string;
-    kecamatan: string;
-    kabupaten: string;
-    provinsi: string;
-    tahunBerdiri: number;
-    usahaUtama: string;
-    produkUtama: string;
-    badanHukum: string;
-    jumlahKaryawan: number;
-    sistemPenjualan: string;
-    persaingan: string;
-    totalAset: number;
-    penjualanPerTahun: number;
-    proyeksiPenjualan: number;
-    nilaiAsetJaminan: number;
-    jumlahDokumenKredit: number;
-    description: string;
-    noNPWP: string;
-    noBIP: string;
+import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
+import { useRouter } from "next/navigation";
+
+export default function LoanDetailPage() {
+  const params = useParams();
+  const router = useRouter();
+  const [loan, setLoan] = useState<any>(null);
+  const [srlScore, setSrlScore] = useState<number | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  const [mlResult, setMlResult] = useState<{
+    status: string;
+    cluster: number;
+  } | null>(null);
+  const [predicting, setPredicting] = useState(false);
+
+  const handleEvaluate = async () => {
+    try {
+      setPredicting(true);
+      const res = await fetch(`/api/loan/${loan.id}/predict`, {
+        method: "POST",
+      });
+      const data = await res.json();
+      setMlResult(data);
+    } catch (err) {
+      console.error("Prediction failed:", err);
+      setMlResult(null);
+    } finally {
+      setPredicting(false);
+    }
   };
-}
 
-export default async function LoanDetailPage({ params }: { params: { id: string } }) {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/loan/${params.id}`, {
-    cache: "no-store",
-  });
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const loanRes = await fetch(`/api/loan/${params.id}`);
+        if (!loanRes.ok) throw new Error("Gagal fetch loan");
 
-  if (!res.ok) return notFound();
+        const loanData = await loanRes.json();
+        setLoan(loanData);
 
-  const loan: LoanDetail = await res.json();
+        // Fetch SRL berdasarkan umkmId (bukan loanId)
+        const srlRes = await fetch(`/api/srl/${loanData.umkmId}`);
+        if (srlRes.ok) {
+          const srlData = await srlRes.json();
+          setSrlScore(srlData.score ?? null);
+        } else {
+          setSrlScore(null); // tetap null jika tidak ada SRL
+        }
+      } catch (err) {
+        console.error(err);
+        setLoan(null);
+        setSrlScore(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [params.id]);
+
+  if (loading) return <p className="p-6 text-center">Loading...</p>;
+  if (!loan)
+    return <p className="p-6 text-center text-red-500">Loan not found.</p>;
+
+  const handleDecision = async (decision: "accept" | "reject") => {
+    try {
+      const res = await fetch(`/api/loan/${loan.id}/${decision}`, {
+        method: "PATCH",
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to update loan status");
+      }
+
+      router.push("/all-loan-list-pending");
+    } catch (err) {
+      console.error(err);
+      alert("Terjadi kesalahan saat memproses permintaan.");
+    }
+  };
 
   return (
     <div className="p-6">
       <h1 className="text-lg font-bold text-center mb-4">
-        Click <span className="text-green-600">Accept Request</span> to Accept OR <span className="text-red-600">Reject Request</span> to Reject Request
+        Click <span className="text-green-600">Accept Request</span> to Accept
+        OR <span className="text-red-600">Reject Request</span> to Reject
+        Request
       </h1>
 
       <div className="space-y-4">
         <div className="bg-blue-200 p-4 rounded-md">
-          <p><strong>UMKM Name:</strong> {loan.umkm.name}</p>
+          <p>
+            <strong>UMKM Name:</strong> {loan.umkm?.name}
+          </p>
+
+          {/* Tombol prediksi ML */}
+          <button
+            onClick={handleEvaluate}
+            disabled={predicting}
+            className="mt-2 text-sm bg-purple-600 text-white px-4 py-1 rounded disabled:opacity-50"
+          >
+            {predicting ? "Evaluating..." : "Evaluate with AI"}
+          </button>
+
+          {/* Hasil Prediksi ML */}
+          {mlResult && (
+            <div className="mt-2 p-2 bg-purple-100 text-sm rounded">
+              <p>
+                <strong>Predicted Status:</strong> {mlResult.status}
+              </p>
+              <p>
+                <strong>Predicted Cluster:</strong> {mlResult.cluster}
+              </p>
+            </div>
+          )}
         </div>
         <div className="bg-blue-200 p-4 rounded-md">
-          <p><strong>UMKM NIB (ID):</strong> {loan.umkm.id}</p>
+          <p>
+            <strong>UMKM NIB (ID):</strong> {loan.umkm?.id}
+          </p>
         </div>
         <div className="bg-blue-200 p-4 rounded-md">
-          <p><strong>Amount of Request:</strong> Rp {loan.jumlahPinjaman.toLocaleString()}</p>
+          <p>
+            <strong>Amount of Request:</strong> Rp{" "}
+            {loan.jumlahPinjaman.toLocaleString()}
+          </p>
         </div>
         <div className="bg-blue-200 p-4 rounded-md">
-          <p><strong>Nomor Rekening:</strong> {loan.umkm.noRekening}</p>
+          <p>
+            <strong>Nomor Rekening:</strong> {loan.umkm?.noRekening}
+          </p>
         </div>
         <div className="bg-blue-200 p-4 rounded-md">
-          <p><strong>Tujuan:</strong> {loan.tujuan}</p>
+          <p>
+            <strong>Tujuan:</strong> {loan.tujuan}
+          </p>
         </div>
 
-        {/* Semua data UMKM lainnya */}
+        {srlScore !== null && (
+          <div className="bg-green-200 p-4 rounded-md">
+            <p>
+              <strong>SRL Score:</strong> {srlScore}
+            </p>
+          </div>
+        )}
+
         <div className="bg-blue-100 p-4 rounded-md space-y-2">
-          <p><strong>Alamat:</strong> {loan.umkm.alamat}</p>
-          <p><strong>RT/RW:</strong> {loan.umkm.rt_rw}</p>
-          <p><strong>Desa/Kelurahan:</strong> {loan.umkm.desa_kel}</p>
-          <p><strong>Kecamatan:</strong> {loan.umkm.kecamatan}</p>
-          <p><strong>Kabupaten:</strong> {loan.umkm.kabupaten}</p>
-          <p><strong>Provinsi:</strong> {loan.umkm.provinsi}</p>
-          <p><strong>Tahun Berdiri:</strong> {loan.umkm.tahunBerdiri}</p>
-          <p><strong>Usaha Utama:</strong> {loan.umkm.usahaUtama}</p>
-          <p><strong>Produk Utama:</strong> {loan.umkm.produkUtama}</p>
-          <p><strong>Badan Hukum:</strong> {loan.umkm.badanHukum}</p>
-          <p><strong>Jumlah Karyawan:</strong> {loan.umkm.jumlahKaryawan}</p>
-          <p><strong>Sistem Penjualan:</strong> {loan.umkm.sistemPenjualan}</p>
-          <p><strong>Persaingan:</strong> {loan.umkm.persaingan}</p>
-          <p><strong>Total Aset:</strong> Rp {loan.umkm.totalAset.toLocaleString()}</p>
-          <p><strong>Penjualan Per Tahun:</strong> Rp {loan.umkm.penjualanPerTahun.toLocaleString()}</p>
-          <p><strong>Proyeksi Penjualan:</strong> Rp {loan.umkm.proyeksiPenjualan.toLocaleString()}</p>
-          <p><strong>Nilai Aset Jaminan:</strong> Rp {loan.umkm.nilaiAsetJaminan.toLocaleString()}</p>
-          <p><strong>Jumlah Dokumen Kredit:</strong> {loan.umkm.jumlahDokumenKredit}</p>
-          <p><strong>Deskripsi:</strong> {loan.umkm.description}</p>
-          <p><strong>No NPWP:</strong> {loan.umkm.noNPWP}</p>
-          <p><strong>No BIP:</strong> {loan.umkm.noBIP}</p>
+          <p>
+            <strong>Alamat:</strong> {loan.umkm?.alamat}
+          </p>
+          <p>
+            <strong>RT/RW:</strong> {loan.umkm?.rt_rw}
+          </p>
+          <p>
+            <strong>Desa/Kelurahan:</strong> {loan.umkm?.desa_kel}
+          </p>
+          <p>
+            <strong>Kecamatan:</strong> {loan.umkm?.kecamatan}
+          </p>
+          <p>
+            <strong>Kabupaten:</strong> {loan.umkm?.kabupaten}
+          </p>
+          <p>
+            <strong>Provinsi:</strong> {loan.umkm?.provinsi}
+          </p>
+          <p>
+            <strong>Tahun Berdiri:</strong> {loan.umkm?.tahunBerdiri}
+          </p>
+          <p>
+            <strong>Usaha Utama:</strong> {loan.umkm?.usahaUtama}
+          </p>
+          <p>
+            <strong>Produk Utama:</strong> {loan.umkm?.produkUtama}
+          </p>
+          <p>
+            <strong>Badan Hukum:</strong> {loan.umkm?.badanHukum}
+          </p>
+          <p>
+            <strong>Jumlah Karyawan:</strong> {loan.umkm?.jumlahKaryawan}
+          </p>
+          <p>
+            <strong>Sistem Penjualan:</strong> {loan.umkm?.sistemPenjualan}
+          </p>
+          <p>
+            <strong>Persaingan:</strong> {loan.umkm?.persaingan}
+          </p>
+          <p>
+            <strong>Total Aset:</strong> Rp{" "}
+            {loan.umkm?.totalAset.toLocaleString()}
+          </p>
+          <p>
+            <strong>Penjualan Per Tahun:</strong> Rp{" "}
+            {loan.umkm?.penjualanPerTahun.toLocaleString()}
+          </p>
+          <p>
+            <strong>Proyeksi Penjualan:</strong> Rp{" "}
+            {loan.umkm?.proyeksiPenjualan.toLocaleString()}
+          </p>
+          <p>
+            <strong>Nilai Aset Jaminan:</strong> Rp{" "}
+            {loan.umkm?.nilaiAsetJaminan.toLocaleString()}
+          </p>
+          <p>
+            <strong>Jumlah Dokumen Kredit:</strong>{" "}
+            {loan.umkm?.jumlahDokumenKredit}
+          </p>
+          <p>
+            <strong>Deskripsi:</strong> {loan.umkm?.description}
+          </p>
+          <p>
+            <strong>No NPWP:</strong> {loan.umkm?.noNPWP}
+          </p>
+          <p>
+            <strong>No BIP:</strong> {loan.umkm?.noBIP}
+          </p>
         </div>
 
-        {/* Tombol Action */}
         <div className="flex justify-center gap-8 mt-6">
-          <form action={`/api/loan/${params.id}/accept`} method="POST">
-            <button type="submit" className="btn bg-blue-700 text-green-400 font-bold px-6 py-2 rounded-full">
-              Accept Request
-            </button>
-          </form>
-          <form action={`/api/loan/${params.id}/reject`} method="POST">
-            <button type="submit" className="btn bg-blue-700 text-red-500 font-bold px-6 py-2 rounded-full">
-              Reject Request
-            </button>
-          </form>
+          <button
+            onClick={() => handleDecision("accept")}
+            className="btn bg-blue-700 text-green-400 font-bold px-6 py-2 rounded-full"
+          >
+            Accept Request
+          </button>
+          <button
+            onClick={() => handleDecision("reject")}
+            className="btn bg-blue-700 text-red-500 font-bold px-6 py-2 rounded-full"
+          >
+            Reject Request
+          </button>
         </div>
       </div>
     </div>

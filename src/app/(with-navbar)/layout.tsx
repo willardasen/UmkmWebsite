@@ -12,7 +12,7 @@ export default function WithNavbarLayout({
   return (
     <SessionProvider>
       <Navbar />
-      <main className="pt-4">{children}<Toaster /></main>
+      <main className="pt-14">{children}<Toaster /></main>
     </SessionProvider>
     
   );

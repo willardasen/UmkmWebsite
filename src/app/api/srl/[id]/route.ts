@@ -1,21 +1,29 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/authOptions';
+import { NextResponse } from 'next/server';
 import { prisma } from '../../../../../prisma/client';
 
 export async function GET(
-  _: NextRequest,
-  { params }: { params: { id: string } }
+  req: Request,
+  context: { params: Promise<{ id: string }> }
 ) {
-  const session = await getServerSession(authOptions);
-  if (!session || !["USER","BANK","SYSTEM"].includes(session.user.role)) {
-    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
-  }
+  const { id } = await context.params;
 
-  const srl = await prisma.sRLAssessment.findUnique({
-    where: { umkmId: params.id }, // find by umkmId
-    include: { umkm: true },
-  });
-  if (!srl) return NextResponse.json({ message: "Not found" }, { status: 404 });
-  return NextResponse.json(srl);
+  try {
+    const assessment = await prisma.sRLAssessment.findUnique({
+      where: {
+        umkmId: id,
+      },
+      select: {
+        score: true,
+      },
+    });
+
+    if (!assessment) {
+      return NextResponse.json({ error: 'SRLAssessment not found' }, { status: 404 });
+    }
+
+    return NextResponse.json({ score: assessment.score });
+  } catch (error) {
+    console.error('Error fetching SRL score:', error);
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+  }
 }

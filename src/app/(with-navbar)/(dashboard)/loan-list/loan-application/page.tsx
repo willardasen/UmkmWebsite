@@ -50,7 +50,7 @@ export default function LoanApplication() {
       }
 
       toast.success("Loan application submitted!");
-      router.push("/loan-application/loan-list");
+      router.push("/loan-list");
     } catch (error) {
       console.error(error);
       if (error instanceof Error) {
@@ -75,8 +75,8 @@ export default function LoanApplication() {
             onChange={handleChange}
             className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="e.g. 10000000"
-            min="0"
-            step="1000000"
+            // min="0"
+            // step="1000000"
             required
           />
           {errors.amount && (

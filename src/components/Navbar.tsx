@@ -38,9 +38,9 @@ export default function Navbar() {
   const isAdmin = role === "BANK" || role === "SYSTEM";
 
   return (
-    <nav className="bg-blue-600 text-white px-6 py-3 flex items-center justify-between">
+    <nav className="fixed top-0 left-0 w-full z-50 bg-blue-600 text-white px-6 py-3 flex items-center justify-between shadow">
       <div className="flex space-x-4">
-        <span className="font-bold">Welcome{session ? `, ${session.user.name}` : ""}</span>
+        <span className="font-bold leading-tight items-center">Welcome{session ? `, ${session.user.name}` : ""}</span>
         {items.map((item) => (
           <Link
             key={item.href}
