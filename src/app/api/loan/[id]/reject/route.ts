@@ -1,8 +1,8 @@
 import { prisma } from "../../../../../../prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
-  const { id } = params;
+export async function PATCH(req: NextRequest, context: { params: Promise<{ id: string }> }) {
+  const { id } = await context.params;
 
   try {
     const updatedLoan = await prisma.loanApplication.update({

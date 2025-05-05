@@ -4,21 +4,32 @@ import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/authOptions";
 import { prisma } from "../../../../../prisma/client";
 
-const ANY_ROLE = ["USER","BANK","SYSTEM"] as const;
-
 export async function GET(
-  _: NextRequest,
-  { params }: { params: { id: string } }
+  request: Request,
+  context: { params: { id: string } }
 ) {
-  const session = await getServerSession(authOptions);
-  if (!session || !ANY_ROLE.includes(session.user.role as any)) {
-    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
-  }
+  const { id } = await context.params;
 
-  const umkm = await prisma.uMKM.findUnique({ where: { userId: params.id } });
-  if (!umkm) return NextResponse.json({ message: "Not found" }, { status: 404 });
-  return NextResponse.json(umkm);
+  try {
+    const umkm = await prisma.uMKM.findUnique({
+      where: { id },
+      include: { user: true },
+    });
+
+    if (!umkm) {
+      return NextResponse.json({ error: "UMKM not found" }, { status: 404 });
+    }
+
+    return NextResponse.json(umkm);
+  } catch (error) {
+    console.error("Failed to fetch UMKM detail:", error);
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 }
+    );
+  }
 }
+
 
 export async function PUT(
   req: NextRequest,

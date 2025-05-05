@@ -17,22 +17,6 @@ export default function LoanDetailPage() {
   } | null>(null);
   const [predicting, setPredicting] = useState(false);
 
-  const handleEvaluate = async () => {
-    try {
-      setPredicting(true);
-      const res = await fetch(`/api/loan/${loan.id}/predict`, {
-        method: "POST",
-      });
-      const data = await res.json();
-      setMlResult(data);
-    } catch (err) {
-      console.error("Prediction failed:", err);
-      setMlResult(null);
-    } finally {
-      setPredicting(false);
-    }
-  };
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -42,13 +26,12 @@ export default function LoanDetailPage() {
         const loanData = await loanRes.json();
         setLoan(loanData);
 
-        // Fetch SRL berdasarkan umkmId (bukan loanId)
         const srlRes = await fetch(`/api/srl/${loanData.umkmId}`);
         if (srlRes.ok) {
           const srlData = await srlRes.json();
           setSrlScore(srlData.score ?? null);
         } else {
-          setSrlScore(null); // tetap null jika tidak ada SRL
+          setSrlScore(null);
         }
       } catch (err) {
         console.error(err);
@@ -61,6 +44,28 @@ export default function LoanDetailPage() {
 
     fetchData();
   }, [params.id]);
+
+  useEffect(() => {
+    const handleEvaluate = async () => {
+      try {
+        setPredicting(true);
+        const res = await fetch(`/api/loan/${params.id}/predict`, {
+          method: "POST",
+        });
+        const data = await res.json();
+        setMlResult(data);
+      } catch (err) {
+        console.error("Prediction failed:", err);
+        setMlResult(null);
+      } finally {
+        setPredicting(false);
+      }
+    };
+
+    if (loan) {
+      handleEvaluate();
+    }
+  }, [loan]);
 
   if (loading) return <p className="p-6 text-center">Loading...</p>;
   if (!loan)
@@ -91,32 +96,26 @@ export default function LoanDetailPage() {
         Request
       </h1>
 
-      <div className="space-y-4">
+      {predicting ? (
+        <div className="mt-2 p-2 bg-yellow-100 text-sm rounded">
+          <p>Evaluating with AI...</p>
+        </div>
+      ) : mlResult ? (
+        <div className="mt-2 p-2 bg-purple-100 text-sm rounded">
+          <p>
+            <strong>Predicted Status:</strong> {mlResult.status}
+          </p>
+          <p>
+            <strong>Predicted Cluster:</strong> {mlResult.cluster}
+          </p>
+        </div>
+      ) : null}
+
+      <div className="space-y-4 mt-4">
         <div className="bg-blue-200 p-4 rounded-md">
           <p>
             <strong>UMKM Name:</strong> {loan.umkm?.name}
           </p>
-
-          {/* Tombol prediksi ML */}
-          <button
-            onClick={handleEvaluate}
-            disabled={predicting}
-            className="mt-2 text-sm bg-purple-600 text-white px-4 py-1 rounded disabled:opacity-50"
-          >
-            {predicting ? "Evaluating..." : "Evaluate with AI"}
-          </button>
-
-          {/* Hasil Prediksi ML */}
-          {mlResult && (
-            <div className="mt-2 p-2 bg-purple-100 text-sm rounded">
-              <p>
-                <strong>Predicted Status:</strong> {mlResult.status}
-              </p>
-              <p>
-                <strong>Predicted Cluster:</strong> {mlResult.cluster}
-              </p>
-            </div>
-          )}
         </div>
         <div className="bg-blue-200 p-4 rounded-md">
           <p>
@@ -222,13 +221,13 @@ export default function LoanDetailPage() {
         <div className="flex justify-center gap-8 mt-6">
           <button
             onClick={() => handleDecision("accept")}
-            className="btn bg-blue-700 text-green-400 font-bold px-6 py-2 rounded-full"
+            className="bg-blue-700 text-green-400 font-bold px-6 py-2 rounded-full transition duration-300 ease-in-out hover:bg-green-500 hover:text-white hover:shadow-lg"
           >
             Accept Request
           </button>
           <button
             onClick={() => handleDecision("reject")}
-            className="btn bg-blue-700 text-red-500 font-bold px-6 py-2 rounded-full"
+            className="bg-blue-700 text-red-500 font-bold px-6 py-2 rounded-full transition duration-300 ease-in-out hover:bg-red-600 hover:text-white hover:shadow-lg"
           >
             Reject Request
           </button>

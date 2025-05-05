@@ -3,11 +3,13 @@ import { prisma } from "../../../../../prisma/client";
 
 export async function GET(
   req: Request,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await context.params;
+
   try {
     const loan = await prisma.loanApplication.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: { umkm: true },
     });
 
