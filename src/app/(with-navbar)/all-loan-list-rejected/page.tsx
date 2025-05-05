@@ -57,7 +57,7 @@ export default function UMKMRequestListPage() {
               </p>
               <p className="text-sm">No Rekening: {req.noRekening}</p>
               <p className="text-sm">
-                Status: <span className="text-red-500">{req.status}</span>
+                Status: <span className="px-3 py-1 rounded-full font-medium bg-red-100 text-red-700">{req.status}</span>
               </p>
             </div>
 

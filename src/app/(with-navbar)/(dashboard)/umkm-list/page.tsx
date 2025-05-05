@@ -92,7 +92,7 @@ export default function UmkmListPage() {
         />
       </div>
 
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto rounded-xl border border-gray-200">
         <table className="min-w-full bg-white shadow rounded">
           <thead className="bg-blue-600 text-white">
             <tr>
@@ -108,7 +108,7 @@ export default function UmkmListPage() {
           </thead>
           <tbody>
             {filtered.map((u, i) => (
-              <tr key={u.id} className={i % 2 === 0 ? "bg-gray-50" : "bg-white"}>
+              <tr key={u.id}>
                 <td className="px-4 py-2">{i + 1}</td>
                 <td
                   className="px-4 py-2 text-blue-600 hover:underline cursor-pointer"

@@ -33,16 +33,19 @@ export default function LoginForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    setErrors({});
+    setServerError("")
 
     try {
       loginSchema.parse(formData);
-      setErrors({});
+      
     } catch (err: any) {
       const fieldErrors: Partial<LoginFormData> = {};
       err.errors?.forEach((error: any) => {
         fieldErrors[error.path[0] as keyof LoginFormData] = error.message;
       });
       setErrors(fieldErrors);
+      setLoading(false);
       return;
     }
 
@@ -55,6 +58,7 @@ export default function LoginForm() {
 
     if (result?.error) {
       setServerError(result.error);
+      setLoading(false);
       return;
     }
 
@@ -126,16 +130,17 @@ export default function LoginForm() {
         <p className="text-red-600 text-sm mb-4">{serverError}</p>
       )}
 
-    <button
-      type="submit"
-      disabled={loading}
-      className={`w-full bg-blue-600 text-white py-2 rounded transition flex items-center justify-center gap-2 
-        ${loading ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-700"}`
-      }
-    >
-      {loading ? "Signing in..." : `Sign in as ${role === "admin" ? "Admin" : "User"}`}
-      {loading && <FaSpinner className="animate-spin h-4 w-4" />}
-    </button>
+      <button
+        type="submit"
+        disabled={loading}
+        className={`w-full bg-blue-600 text-white py-2 rounded transition flex items-center justify-center gap-2 
+        ${loading ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-700"}`}
+      >
+        {loading
+          ? "Signing in..."
+          : `Sign in as ${role === "admin" ? "Admin" : "User"}`}
+        {loading && <FaSpinner className="animate-spin h-4 w-4" />}
+      </button>
 
       <p className="text-center text-sm text-gray-600 mt-4">
         Belum punya akun?{" "}

@@ -15,7 +15,7 @@ export default function SRLPage() {
       if (!session?.user?.id) return;
 
       // Ambil data UMKM
-      const resUmkm = await fetch(`/api/umkm/${session.user.id}`);
+      const resUmkm = await fetch(`/api/srl/details/${session.user.id}`);
       if (resUmkm.ok) {
         const data = await resUmkm.json();
         setUmkm(data);

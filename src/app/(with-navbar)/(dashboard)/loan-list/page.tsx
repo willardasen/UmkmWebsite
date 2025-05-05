@@ -46,12 +46,12 @@ export default function LoanListPage() {
 
       <div className="overflow-x-auto rounded-xl border border-gray-200">
         <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-100">
+          <thead className="bg-blue-600">
             <tr>
-              <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Date</th>
-              <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Amount (IDR)</th>
-              <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Purpose</th>
-              <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Status</th>
+              <th className="px-6 py-4 text-left text-sm font-semibold text-white">Date</th>
+              <th className="px-6 py-4 text-left text-sm font-semibold text-white">Amount (IDR)</th>
+              <th className="px-6 py-4 text-left text-sm font-semibold text-white">Purpose</th>
+              <th className="px-6 py-4 text-left text-sm font-semibold text-white">Status</th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">

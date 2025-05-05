@@ -101,7 +101,15 @@ export default function LoanDetailPage() {
           <p>Evaluating with AI...</p>
         </div>
       ) : mlResult ? (
-        <div className="mt-2 p-2 bg-purple-100 text-sm rounded">
+        <div
+          className={`mt-2 p-2 text-sm rounded ${
+            mlResult.status === "ACCEPTED"
+              ? "bg-green-100 text-green-800"
+              : mlResult.status === "REJECTED"
+              ? "bg-red-100 text-red-800"
+              : "bg-purple-100 text-purple-800"
+          }`}
+        >
           <p>
             <strong>Predicted Status:</strong> {mlResult.status}
           </p>
