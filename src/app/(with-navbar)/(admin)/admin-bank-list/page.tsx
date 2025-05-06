@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { prisma } from "../../../../prisma/client";
+import { prisma } from "../../../../../prisma/client";
 
 export default async function AdminBankListPage() {
   const adminBanks = await prisma.admin.findMany({

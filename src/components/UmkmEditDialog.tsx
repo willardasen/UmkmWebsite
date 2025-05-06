@@ -1,6 +1,6 @@
 "use client";
 
-import { Dialog } from "@headlessui/react";
+import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 import { IoCloseSharp } from "react-icons/io5";
 import React, { useState, useEffect } from "react";
 
@@ -34,9 +34,9 @@ const defaultFields: Record<string, string> = {
   nilaiAsetJaminan: "",
   jumlahDokumenKredit: "",
   description: "",
-  noRekening:"",
-  noNPWP:"",
-  noBIP:""
+  noRekening: "",
+  noNPWP: "",
+  noBIP: "",
 };
 
 // Field enum dan opsinya
@@ -83,23 +83,22 @@ export default function UmkmEditDialog({
       onClose();
     }
     setLoading(false);
-
   };
 
   return (
     <Dialog open={open} onClose={onClose} className="relative z-50">
       <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
       <div className="fixed inset-0 flex items-center justify-center p-4 overflow-auto">
-        <Dialog.Panel className="bg-white rounded-lg p-6 max-w-2xl w-full relative shadow-lg">
+        <DialogPanel className="bg-white rounded-lg p-6 max-w-2xl w-full relative shadow-lg">
           <button
             className="absolute top-4 right-4 text-gray-500 hover:text-gray-800"
             onClick={onClose}
           >
             <IoCloseSharp />
           </button>
-          <Dialog.Title className="text-xl font-semibold mb-4">
+          <DialogTitle className="text-xl font-semibold mb-4">
             {initialData?.id ? "Edit UMKM Details" : "Buat UMKM Baru"}
-          </Dialog.Title>
+          </DialogTitle>
 
           <form className="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[60vh] overflow-auto">
             {Object.entries(form)
@@ -150,7 +149,7 @@ export default function UmkmEditDialog({
               {loading && <FaSpinner className="animate-spin h-4 w-4" />}
             </button>
           </div>
-        </Dialog.Panel>
+        </DialogPanel>
       </div>
     </Dialog>
   );

@@ -1,6 +1,6 @@
 "use client";
 
-import { Dialog } from "@headlessui/react";
+import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 import { IoCloseSharp } from "react-icons/io5";
 import React, { useState, useEffect } from "react";
 import { ProfileData } from "./ProfileClient";
@@ -51,11 +51,11 @@ export default function ProfileEditDialog({
     <Dialog open={open} onClose={onClose} className="relative z-50">
       <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
       <div className="fixed inset-0 flex items-center justify-center p-4">
-        <Dialog.Panel className="bg-white rounded-lg p-6 max-w-md w-full relative shadow-lg">
+        <DialogPanel className="bg-white rounded-lg p-6 max-w-md w-full relative shadow-lg">
           <button className="absolute top-4 right-4 text-gray-500 hover:text-gray-800" onClick={onClose}>
             <IoCloseSharp size={20} />
           </button>
-          <Dialog.Title className="text-xl font-semibold mb-4">Edit Profile</Dialog.Title>
+          <DialogTitle className="text-xl font-semibold mb-4">Edit Profile</DialogTitle>
           <form className="grid grid-cols-1 gap-4">
             {[
               ["name", "Name", form.name],
@@ -87,7 +87,7 @@ export default function ProfileEditDialog({
             </button>
 
           </div>
-        </Dialog.Panel>
+        </DialogPanel>
       </div>
     </Dialog>
   );
