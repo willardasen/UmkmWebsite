@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/authOptions';
 import { prisma } from '../../../../../prisma/client';
+import bcrypt from 'bcryptjs';
 
 export async function PUT(req: NextRequest) {
   // 1. Authenticate
@@ -19,19 +20,26 @@ export async function PUT(req: NextRequest) {
     return NextResponse.json({ message: 'Invalid JSON' }, { status: 400 });
   }
 
-  const { name, email } = body;
+  const { name, email, password } = body;
 
-  // 3. Validate
+  
   if (!name || !email) {
-    return NextResponse.json({ message: 'Name and email are required' }, { status: 400 });
+    return NextResponse.json({ message: "Name and email are required" }, { status: 400 });
+  }
+  // Tambahan bcrypt jika password diisi
+  let updateData: any = { name, email };
+
+  if (password) {
+    const hashed = await bcrypt.hash(password, 10);
+    updateData.password = hashed;
   }
 
   try {
     // 4. Update in DB
     const updated = await prisma.admin.update({
       where: { id: session.user.id },
-      data: { name, email },
-      select: { id: true, name: true, email: true, role: true }
+      data: updateData,
+      select: { id: true, name: true, email: true, role: true },
     });
 
     return NextResponse.json(updated, { status: 200 });
