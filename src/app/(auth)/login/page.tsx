@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { signIn, getSession } from "next-auth/react";
 import { loginSchema, LoginFormData } from "@/lib/validations/auth";
 import ErrorMessage from "@/components/ErrorMessage";
-import { FaSpinner } from "react-icons/fa";
+import { FaSpinner, FaEye, FaEyeSlash } from "react-icons/fa";
 import Link from "next/link";
 
 export default function LoginForm() {
@@ -19,6 +19,7 @@ export default function LoginForm() {
   const [errors, setErrors] = useState<Partial<LoginFormData>>({});
   const [serverError, setServerError] = useState<string>("");
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -34,11 +35,10 @@ export default function LoginForm() {
     e.preventDefault();
     setLoading(true);
     setErrors({});
-    setServerError("")
+    setServerError("");
 
     try {
       loginSchema.parse(formData);
-      
     } catch (err: any) {
       const fieldErrors: Partial<LoginFormData> = {};
       err.errors?.forEach((error: any) => {
@@ -114,15 +114,25 @@ export default function LoginForm() {
 
       <div className="mb-4">
         <label className="block mb-1 text-gray-700">Password</label>
-        <input
-          type="password"
-          name="password"
-          value={formData.password}
-          onChange={handleInputChange}
-          placeholder="Enter your password"
-          className="w-full px-3 py-2 border rounded"
-          required
-        />
+        <div className="relative">
+          <input
+            type={showPassword ? "text" : "password"}
+            name="password"
+            value={formData.password}
+            onChange={handleInputChange}
+            placeholder="Enter your password"
+            className="w-full px-3 py-2 border rounded pr-10"
+            required
+          />
+          <button
+            type="button"
+            onClick={() => setShowPassword((prev) => !prev)}
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 hover:text-gray-900"
+            tabIndex={-1}
+          >
+            {showPassword ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
+          </button>
+        </div>
         <ErrorMessage message={errors.password} />
       </div>
 

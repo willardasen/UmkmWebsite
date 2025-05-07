@@ -8,7 +8,7 @@ import UmkmEditDialog from "@/components/UmkmEditDialog";
 export interface ProfileData {
   name: string;
   email: string;
-  noTelepon?: string;
+  noTelepon: string;
   role: string;
   umkm?: Record<string, any> | null;
 }

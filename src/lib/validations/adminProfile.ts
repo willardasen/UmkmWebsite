@@ -7,7 +7,8 @@ export const adminProfileSchema = z.object({
   email: z.string().email("Email tidak valid"),
   password: z.string().min(6, "Minimal 6 karakter").regex(passwordRegex, "Password must contain at least one uppercase letter and one number").optional().or(z.literal("")),
   confirmPassword: z.string().optional().or(z.literal("")),
-}).refine((data) => !data.password || data.password === data.confirmPassword, {
+})
+.refine((data) => !data.password || data.password === data.confirmPassword, {
   message: "Password tidak cocok",
   path: ["confirmPassword"],
 });

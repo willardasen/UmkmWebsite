@@ -5,10 +5,11 @@ import { IoCloseSharp } from "react-icons/io5";
 import React, { useState, useEffect } from "react";
 import { ProfileData } from "./ProfileClient";
 import { FaSpinner } from "react-icons/fa";
-
+import { profileSchema, ProfileFormData } from "@/lib/validations/profile";
+import ErrorMessage from "@/components/ErrorMessage";
 
 interface ProfileEditDialogProps {
-  initialData: ProfileData;
+  initialData: {name: string; email: string; noTelepon: string;};
   open: boolean;
   onClose: () => void;
   onSaveSuccess: (updatedData: ProfileData) => void;
@@ -20,31 +21,45 @@ export default function ProfileEditDialog({
   onClose,
   onSaveSuccess,
 }: ProfileEditDialogProps) {
-  const [form, setForm] = useState(initialData);
+  const [form, setForm] = useState<ProfileFormData>({ ...initialData, password: "", confirmPassword: "" });
+  const [errors, setErrors] = useState<Partial<Record<keyof ProfileFormData, string>>>({});
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    setForm(initialData);
+    setForm({ ...initialData, password: "", confirmPassword: "" });
+    setErrors({});
   }, [initialData]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    setErrors((prev) => ({ ...prev, [e.target.name]: undefined }));
   };
 
-  const [loading, setLoading] = useState(false);
   const handleSave = async () => {
-    const res = await fetch("/api/user/update", {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(form),
-    });
-
-    if (res.ok) {
-      const updated = await res.json();
-      onSaveSuccess(updated);
-      onClose();
+    try {
+      profileSchema.parse(form);
+      setLoading(true);
+      const res = await fetch("/api/user/update", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        onSaveSuccess({ ...data });
+        onClose();
+      }
+    } catch (err: any) {
+      const fieldErrors: any = {};
+      if (err?.errors) {
+        err.errors.forEach((error: any) => {
+          fieldErrors[error.path[0]] = error.message;
+        });
+      }
+      setErrors(fieldErrors);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
-
   };
 
   return (
@@ -60,32 +75,33 @@ export default function ProfileEditDialog({
             {[
               ["name", "Name", form.name],
               ["email", "Email", form.email],
-              ["noTelepon", "Contact Number", form.noTelepon],
+              ["noTelepon", "Contact Number", form.noTelepon || ""],
+              ["password", "New Password", form.password],
+              ["confirmPassword", "Confirm Password", form.confirmPassword],
             ].map(([field, label, value]) => (
               <div key={field} className="flex flex-col">
                 <label className="text-gray-700">{label}</label>
                 <input
                   name={field as string}
-                  type="text"
+                  type={(field ?? "").toLowerCase().includes("password") ? "password" : "text"}
                   value={value as string}
                   onChange={handleChange}
                   className="mt-1 p-2 border rounded"
                 />
+                <ErrorMessage message={errors[field as keyof ProfileFormData]} />
               </div>
             ))}
           </form>
           <div className="mt-6 flex justify-end space-x-2">
             <button onClick={onClose} className="px-4 py-2 border rounded">Cancel</button>
-            
             <button
-                onClick={handleSave}
-                className="px-4 py-2 bg-blue-600 text-white rounded flex items-center justify-center gap-2 min-w-[100px] hover:bg-blue-700"
-                disabled={loading}
-                >
-                {loading ? "Saving..." : "Save"}
-                {loading && <FaSpinner className="animate-spin h-4 w-4" />}
+              onClick={handleSave}
+              className="px-4 py-2 bg-blue-600 text-white rounded flex items-center justify-center gap-2 min-w-[100px] hover:bg-blue-700"
+              disabled={loading}
+            >
+              {loading ? "Saving..." : "Save"}
+              {loading && <FaSpinner className="animate-spin h-4 w-4" />}
             </button>
-
           </div>
         </DialogPanel>
       </div>

@@ -10,7 +10,7 @@ export const loginSchema = z.object({
 export const registerSchema = z.object({
   name: z.string().trim().min(3, "Name must be at least 3 characters"),
   email: z.string().trim().toLowerCase().email("Invalid email address"),
-  phone: z.string().min(10, "Phone number must be at least 10 digits").optional(),
+  phone: z.string().min(10, "Phone number must be at least 10 digits"),
   password: z.string()
     .min(6, "Password must be at least 6 characters")
     .regex(passwordRegex, "Password must contain at least one uppercase letter and one number"),

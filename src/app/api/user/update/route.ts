@@ -3,15 +3,14 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/authOptions';
 import { prisma } from '../../../../../prisma/client';
+import bcrypt from 'bcryptjs';
 
 export async function PUT(req: NextRequest) {
-  // 1. Authenticate
   const session = await getServerSession(authOptions);
   if (!session || session.user.role !== 'USER') {
     return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
   }
 
-  // 2. Parse body
   let body;
   try {
     body = await req.json();
@@ -19,18 +18,23 @@ export async function PUT(req: NextRequest) {
     return NextResponse.json({ message: 'Invalid JSON' }, { status: 400 });
   }
 
-  const { name, email, noTelepon} = body;
+  const { name, email, noTelepon, password } = body;
 
-  // 3. Validate fields (simple)
   if (!name || !email) {
     return NextResponse.json({ message: 'Name and email are required' }, { status: 400 });
   }
 
+  const dataToUpdate: any = { name, email, noTelepon };
+
+  if (password && password.trim() !== '') {
+    const hashed = await bcrypt.hash(password, 10);
+    dataToUpdate.password = hashed;
+  }
+
   try {
-    // 4. Update in DB
     const updated = await prisma.uMKMUser.update({
       where: { id: session.user.id },
-      data: { name, email, noTelepon },
+      data: dataToUpdate,
       select: { id: true, name: true, email: true, noTelepon: true, role: true }
     });
 
@@ -40,4 +44,3 @@ export async function PUT(req: NextRequest) {
     return NextResponse.json({ message: 'Error updating profile' }, { status: 500 });
   }
 }
-

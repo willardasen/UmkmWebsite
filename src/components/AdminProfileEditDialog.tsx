@@ -40,7 +40,7 @@ export default function AdminProfileEditDialog({ initialData, open, onClose, onS
       });
       const data = await res.json();
       if (res.ok) {
-        onSaveSuccess({ name: data.name, email: data.email, password: "", confirmPassword: "" });
+        onSaveSuccess({ ...data });
         onClose();
       }
     } catch (err: any) {
