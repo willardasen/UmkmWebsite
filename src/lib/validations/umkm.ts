@@ -1,5 +1,5 @@
 import { z } from "zod";
-
+//blm dipake
 export const umkmSchema = z.object({
   name: z.string().min(1, "Nama UMKM wajib diisi"),
   alamat: z.string().min(1, "Alamat wajib diisi"),

@@ -118,6 +118,14 @@ export default function SRLPage() {
         >
           {loading ? "Submitting..." : "Submit My SRL"}
         </button>
+        {score && (
+          <button
+            onClick={() => window.open(`/api/srl/pdf/${umkm?.id}`, "_blank")}
+            className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 transition"
+          >
+            Save as PDF
+          </button>
+        )}
       </div>
     </div>
   );
