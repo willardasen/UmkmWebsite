@@ -75,7 +75,7 @@ export default function RegisterForm() {
           name="name"
           value={formData.name}
           onChange={handleChange}
-          placeholder="Enter your name"
+          placeholder="Enter your password"
           className="w-full mt-1 px-3 py-2 border rounded"
         />
         <ErrorMessage message={errors.name} />
