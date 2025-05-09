@@ -63,7 +63,7 @@ export default function ProfileClient({ data }: { data: ProfileData }) {
           {[
             ["Name", profileData.name],
             ["Email", profileData.email],
-            ["Contact Number", profileData.noTelepon || ""],
+            ["No telepon", profileData.noTelepon],
             ["Role", profileData.role],
           ].map(([label, val]) => (
             <div key={label} className="flex flex-col">

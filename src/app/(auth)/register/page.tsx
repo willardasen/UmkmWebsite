@@ -69,13 +69,13 @@ export default function RegisterForm() {
       <h2 className="text-center text-xl font-semibold mb-4">Create Account</h2>
 
       <label className="block mb-2">
-        <span>Name</span>
+        <span>Nama</span>
         <input
           type="text"
           name="name"
           value={formData.name}
           onChange={handleChange}
-          placeholder="Enter your password"
+          placeholder="Masukan nama anda"
           className="w-full mt-1 px-3 py-2 border rounded"
         />
         <ErrorMessage message={errors.name} />
@@ -88,20 +88,20 @@ export default function RegisterForm() {
           name="email"
           value={formData.email}
           onChange={handleChange}
-          placeholder="Enter your email"
+          placeholder="Masukkan email anda"
           className="w-full mt-1 px-3 py-2 border rounded"
         />
         <ErrorMessage message={errors.email} />
       </label>
 
       <label className="block mb-2">
-        <span>Phone</span>
+        <span>No telepon</span>
         <input
           type="text"
           name="phone"
           value={formData.phone}
           onChange={handleChange}
-          placeholder="Enter your phone number"
+          placeholder="Masukkan no telepon anda"
           className="w-full mt-1 px-3 py-2 border rounded"
         />
         <ErrorMessage message={errors.phone} />
@@ -115,7 +115,7 @@ export default function RegisterForm() {
             name="password"
             value={formData.password}
             onChange={handleChange}
-            placeholder="Enter your password"
+            placeholder="Masukan password anda"
             className="w-full mt-1 px-3 py-2 border rounded"
           />
           <button
@@ -139,7 +139,7 @@ export default function RegisterForm() {
             name="confirmPassword"
             value={formData.confirmPassword}
             onChange={handleChange}
-            placeholder="Enter your confirm password"
+            placeholder="Masukan confirm password anda"
             className="w-full mt-1 px-3 py-2 border rounded"
           />
           <button

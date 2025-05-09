@@ -50,15 +50,15 @@ export default function SRLPage() {
       <div className="max-w-xl mx-auto bg-white shadow-xl rounded-xl p-6 space-y-4">
         {score && (
           <div className="text-center text-xl font-bold text-green-700">
-            🎉 Your SRL Score: {score}
+            🎉 SRL Score Anda: {score}
           </div>
         )}
         <h1 className="text-center text-lg font-semibold">
-          Welcome! Please Fill Out This SRL Form to Proceed!
+          Selamat datang! Isi data UMKM terlebih dahulu!
         </h1>
 
         <div>
-          <label>Company's Name</label>
+          <label>Nama UMKM</label>
           <input
             type="text"
             value={umkm?.name || ""}
@@ -68,7 +68,7 @@ export default function SRLPage() {
         </div>
 
         <div>
-          <label>Company's ID (NIB)</label>
+          <label>Nomor Induk Berusaha(NIB)</label>
           <input
             type="text"
             value={umkm?.noBIP || ""}
@@ -78,7 +78,7 @@ export default function SRLPage() {
         </div>
 
         <div>
-          <label>Years of Running</label>
+          <label>Jumlah karyawan</label>
           <input
             type="text"
             value={
@@ -102,7 +102,7 @@ export default function SRLPage() {
         </div>
 
         <div>
-          <label>Yearly Assets</label>
+          <label>Omset per tahun</label>
           <input
             type="text"
             value={umkm?.penjualanPerTahun ?? ""}
@@ -116,7 +116,7 @@ export default function SRLPage() {
           disabled={loading}
           className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
         >
-          {loading ? "Submitting..." : "Submit My SRL"}
+          {loading ? "Submitting..." : "Submit"}
         </button>
         {score && (
           <button

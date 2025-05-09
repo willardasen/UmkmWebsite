@@ -105,7 +105,7 @@ export default function LoginForm() {
           name="email"
           value={formData.email}
           onChange={handleInputChange}
-          placeholder="Enter your email"
+          placeholder="Masukkan email anda"
           className="w-full px-3 py-2 border rounded"
           required
         />
@@ -120,7 +120,7 @@ export default function LoginForm() {
             name="password"
             value={formData.password}
             onChange={handleInputChange}
-            placeholder="Enter your password"
+            placeholder="Masukan password anda"
             className="w-full px-3 py-2 border rounded pr-10"
             required
           />
@@ -148,7 +148,7 @@ export default function LoginForm() {
       >
         {loading
           ? "Signing in..."
-          : `Sign in as ${role === "admin" ? "Admin" : "User"}`}
+          : `Sign in sebagai ${role === "admin" ? "Admin" : "User"}`}
         {loading && <FaSpinner className="animate-spin h-4 w-4" />}
       </button>
 

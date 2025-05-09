@@ -40,8 +40,7 @@ export default function UMKMRequestListPage() {
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold text-center mb-4">
-        Click <span className="text-blue-600">View</span> Button for Checking
-        Request List
+         Click tombol <span className="text-blue-600">View</span> untuk melihat detail peminjaman
       </h1>
 
       <div className="space-y-4">

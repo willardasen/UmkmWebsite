@@ -109,6 +109,7 @@ export default function AdminProfileEditDialog({
                   <input
                     name={field}
                     type={isPasswordField && !show ? "password" : "text"}
+                    placeholder={isPasswordField && !show ? "Tidak perlu diisi jika tidak ingin menganti" : ""}
                     value={value}
                     onChange={handleChange}
                     className="mt-1 p-2 border rounded pr-10"

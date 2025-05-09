@@ -19,7 +19,7 @@ export default async function AdminBankListPage() {
         <h2 className="text-2xl font-semibold">Admin Bank List</h2>
         <Link href="/admin-bank-list/create">
           <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-            + Add Admin
+            + Tambahkan Admin
           </button>
         </Link>
       </div>
@@ -30,7 +30,7 @@ export default async function AdminBankListPage() {
             <tr className="bg-gray-100">
               <th className="p-4">Name</th>
               <th className="p-4">Email</th>
-              <th className="p-4">Created At</th>
+              <th className="p-4">Tanggal dibuat</th>
             </tr>
           </thead>
           <tbody>

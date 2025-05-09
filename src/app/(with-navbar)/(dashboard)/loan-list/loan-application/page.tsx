@@ -63,11 +63,11 @@ export default function LoanApplication() {
 
   return (
     <div className="max-w-xl mx-auto bg-white shadow-lg rounded-2xl p-8 mt-10 border border-gray-200">
-      <h1 className="text-3xl font-bold text-center mb-8">Apply for a Loan</h1>
+      <h1 className="text-3xl font-bold text-center mb-8">Apply untuk peminjaman</h1>
 
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="flex flex-col gap-2">
-          <label className="text-md font-medium">Amount of Fund (IDR)</label>
+          <label className="text-md font-medium">Jumlah peminjaman (IDR)</label>
           <input
             type="number"
             name="amount"
@@ -85,7 +85,7 @@ export default function LoanApplication() {
         </div>
 
         <div className="flex flex-col gap-2">
-          <label className="text-md font-medium">Purpose of Fund</label>
+          <label className="text-md font-medium">Tujuan Peminjaman</label>
           <textarea
             name="purpose"
             value={formData.purpose}

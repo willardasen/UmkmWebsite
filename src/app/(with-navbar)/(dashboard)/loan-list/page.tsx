@@ -33,13 +33,13 @@ export default function LoanListPage() {
   return (
     <div className="max-w-6xl mx-auto p-6">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">Loan Applications</h1>
+        <h1 className="text-3xl font-bold">Pendaftaran peminjaman dana</h1>
         <button className="btn btn-primary">
           <Link
           href="/loan-list/loan-application"
           className="bg-blue-700 hover:bg-blue-800 text-white px-4 py-2 rounded-full font-semibold"
         >
-          Add Loan
+          Tambah Peminjaman +
         </Link>
         </button>
       </div>
@@ -48,9 +48,9 @@ export default function LoanListPage() {
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-blue-600">
             <tr>
-              <th className="px-6 py-4 text-left text-sm font-semibold text-white">Date</th>
-              <th className="px-6 py-4 text-left text-sm font-semibold text-white">Amount (IDR)</th>
-              <th className="px-6 py-4 text-left text-sm font-semibold text-white">Purpose</th>
+              <th className="px-6 py-4 text-left text-sm font-semibold text-white">Tanggal</th>
+              <th className="px-6 py-4 text-left text-sm font-semibold text-white">Jumlah (IDR)</th>
+              <th className="px-6 py-4 text-left text-sm font-semibold text-white">Tujuan</th>
               <th className="px-6 py-4 text-left text-sm font-semibold text-white">Status</th>
             </tr>
           </thead>

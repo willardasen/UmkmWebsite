@@ -13,7 +13,6 @@ export default function LoanDetailPage() {
 
   const [mlResult, setMlResult] = useState<{
     status: string;
-    cluster: number;
   } | null>(null);
   const [predicting, setPredicting] = useState(false);
 
@@ -91,9 +90,8 @@ export default function LoanDetailPage() {
   return (
     <div className="p-6">
       <h1 className="text-lg font-bold text-center mb-4">
-        Click <span className="text-green-600">Accept Request</span> to Accept
-        OR <span className="text-red-600">Reject Request</span> to Reject
-        Request
+        Click <span className="text-green-600">Accept Request</span> to Menerima
+        OR <span className="text-red-600">Reject Request</span> to Menolak
       </h1>
 
       {predicting ? (
@@ -111,10 +109,7 @@ export default function LoanDetailPage() {
           }`}
         >
           <p>
-            <strong>Predicted Status:</strong> {mlResult.status}
-          </p>
-          <p>
-            <strong>Predicted Cluster:</strong> {mlResult.cluster}
+            <strong>Hasil Prediksi:</strong> {mlResult.status}
           </p>
         </div>
       ) : null}
@@ -122,17 +117,17 @@ export default function LoanDetailPage() {
       <div className="space-y-4 mt-4">
         <div className="bg-blue-200 p-4 rounded-md">
           <p>
-            <strong>UMKM Name:</strong> {loan.umkm?.name}
+            <strong>Nama UMKM:</strong> {loan.umkm?.name}
           </p>
         </div>
         <div className="bg-blue-200 p-4 rounded-md">
           <p>
-            <strong>UMKM NIB (ID):</strong> {loan.umkm?.id}
+            <strong>UMKM Id (ID):</strong> {loan.umkm?.id}
           </p>
         </div>
         <div className="bg-blue-200 p-4 rounded-md">
           <p>
-            <strong>Amount of Request:</strong> Rp{" "}
+            <strong>Jumlah Permintaan:</strong> Rp{" "}
             {loan.jumlahPinjaman.toLocaleString()}
           </p>
         </div>
