@@ -101,7 +101,7 @@ export default function LoanDetailPage() {
       ) : mlResult ? (
         <div
           className={`mt-2 p-2 text-sm rounded ${
-            mlResult.status === "ACCEPTED"
+            mlResult.status === "APPROVED"
               ? "bg-green-100 text-green-800"
               : mlResult.status === "REJECTED"
               ? "bg-red-100 text-red-800"
