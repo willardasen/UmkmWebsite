@@ -71,7 +71,7 @@ export default function SRLPage() {
           <label>Nomor Induk Berusaha(NIB)</label>
           <input
             type="text"
-            value={umkm?.noBIP || ""}
+            value={umkm?.noNIB || ""}
             readOnly
             className="w-full bg-blue-300 p-2 rounded mt-1"
           />

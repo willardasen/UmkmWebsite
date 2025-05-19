@@ -27,7 +27,7 @@ export default async function CertificatePage(context: {
       <div className="w-20 h-1 bg-yellow-500 mx-auto mb-4" />
       <p className="text-lg mb-1">DIBERIKAN KEPADA</p>
       <p className="text-2xl font-bold text-gray-800">{umkm.name}</p>
-      <p className="text-md text-gray-700 mb-5">{umkm.noBIP}</p>
+      <p className="text-md text-gray-700 mb-5">{umkm.noNIB}</p>
       <p className="text-lg text-gray-800">
         {umkm.name} memperoleh skor SRL:{" "}
         <span className="font-semibold">{srl.score}</span>

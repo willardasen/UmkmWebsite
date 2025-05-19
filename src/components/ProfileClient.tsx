@@ -43,7 +43,7 @@ export default function ProfileClient({ data }: { data: ProfileData }) {
     "description",
     "noRekening",
     "noNPWP",
-    "noBIP",
+    "noNIB",
   ];
 
   return (

@@ -73,7 +73,7 @@ export async function PUT(
         description: data.description,
         noRekening: data.noRekening,
         noNPWP: data.noNPWP,
-        noBIP: data.noBIP,
+        noNIB: data.noNIB,
       },
     });
     return NextResponse.json(updated);

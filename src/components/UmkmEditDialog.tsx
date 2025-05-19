@@ -36,7 +36,7 @@ const defaultFields: Record<string, string> = {
   description: "",
   noRekening: "",
   noNPWP: "",
-  noBIP: "",
+  noNIB: "",
 };
 
 // Field enum dan opsinya

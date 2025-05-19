@@ -116,7 +116,7 @@ await Promise.all([
       description: 'UMKM produksi makanan ringan sehat.',
       noRekening: '1234567890',
       noNPWP: '987654321',
-      noBIP: 'BIP001',
+      noNIB: '48293015',
     },
   }),
   prisma.uMKM.upsert({
@@ -146,7 +146,7 @@ await Promise.all([
       description: 'UMKM kerajinan tas berbahan alami.',
       noRekening: '0987654321',
       noNPWP: '123456789',
-      noBIP: 'BIP002',
+      noNIB: '739201846',
     },
   }),
   prisma.uMKM.upsert({
@@ -176,7 +176,7 @@ await Promise.all([
       description: 'UMKM bidang umum.',
       noRekening: '1111222233',
       noNPWP: '1122334455',
-      noBIP: 'BIP003',
+      noNIB: '65738291',
     },
   }),
   prisma.uMKM.upsert({
@@ -206,7 +206,7 @@ await Promise.all([
       description: 'UMKM sektor unggulan.',
       noRekening: '4444555566',
       noNPWP: '6677889900',
-      noBIP: 'BIP004',
+      noNIB: '1029384756',
     },
   }),
   prisma.uMKM.upsert({
@@ -236,7 +236,7 @@ await Promise.all([
       description: 'UMKM sektor tradisional.',
       noRekening: '7777888899',
       noNPWP: '9988776655',
-      noBIP: 'BIP005',
+      noNIB: '928173645',
     },
   }),
 ]);

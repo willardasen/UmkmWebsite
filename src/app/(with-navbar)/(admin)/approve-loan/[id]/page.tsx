@@ -128,7 +128,7 @@ export default function LoanDetailPage() {
         <div className="bg-blue-200 p-4 rounded-md">
           <p>
             <strong>Jumlah Permintaan:</strong> Rp{" "}
-            {loan.jumlahPinjaman.toLocaleString()}
+            {loan.jumlahPinjamanString("id-ID")}
           </p>
         </div>
         <div className="bg-blue-200 p-4 rounded-md">
@@ -192,19 +192,19 @@ export default function LoanDetailPage() {
           </p>
           <p>
             <strong>Total Aset:</strong> Rp{" "}
-            {loan.umkm?.totalAset.toLocaleString()}
+            {loan.umkm?.totalAset.toLocaleString("id-ID")}
           </p>
           <p>
             <strong>Penjualan Per Tahun:</strong> Rp{" "}
-            {loan.umkm?.penjualanPerTahun.toLocaleString()}
+            {loan.umkm?.penjualanPerTahun.toLocaleString("id-ID")}
           </p>
           <p>
             <strong>Proyeksi Penjualan:</strong> Rp{" "}
-            {loan.umkm?.proyeksiPenjualan.toLocaleString()}
+            {loan.umkm?.proyeksiPenjualan.toLocaleString("id-ID")}
           </p>
           <p>
             <strong>Nilai Aset Jaminan:</strong> Rp{" "}
-            {loan.umkm?.nilaiAsetJaminan.toLocaleString()}
+            {loan.umkm?.nilaiAsetJaminan.toLocaleString("id-ID")}
           </p>
           <p>
             <strong>Jumlah Dokumen Kredit:</strong>{" "}
@@ -217,7 +217,7 @@ export default function LoanDetailPage() {
             <strong>No NPWP:</strong> {loan.umkm?.noNPWP}
           </p>
           <p>
-            <strong>No BIP:</strong> {loan.umkm?.noBIP}
+            <strong>No NIB:</strong> {loan.umkm?.noNIB}
           </p>
         </div>
 

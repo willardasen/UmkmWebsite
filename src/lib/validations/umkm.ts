@@ -39,9 +39,9 @@ export const umkmSchema = z.object({
   noNPWP: z
     .string()
     .regex(/^[0-9]{15}$/, "Nomor NPWP harus 15 digit angka"),
-  noBIP: z
+  noNIB: z
     .string()
-    .min(1, "Nomor BIP wajib diisi"),
+    .min(1, "Nomor NIB wajib diisi"),
 });
 
 

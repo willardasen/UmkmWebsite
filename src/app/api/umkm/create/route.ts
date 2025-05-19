@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
     description,
     noRekening,
     noNPWP,
-    noBIP,
+    noNIB,
   } = await req.json();
 
   // 3️⃣ Basic validation
@@ -76,7 +76,7 @@ export async function POST(req: NextRequest) {
         description,
         noRekening,
         noNPWP,
-        noBIP,
+        noNIB,
         user: { connect: { id: session.user.id } },
       },
     });

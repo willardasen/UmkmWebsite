@@ -52,7 +52,7 @@ export default function UMKMRequestListPage() {
             <div>
               <p className="font-bold">{req.nama}</p>
               <p className="text-sm">
-                Jumlah Pinjaman: Rp {req.jumlahPinjaman.toLocaleString()}
+                Jumlah Pinjaman: Rp {req.jumlahPinjaman.toLocaleString("id-ID")}
               </p>
               <p className="text-sm">No Rekening: {req.noRekening}</p>
               <p className="text-sm">

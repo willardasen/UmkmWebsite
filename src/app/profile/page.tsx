@@ -1,5 +1,3 @@
-
-
 // File: src/app/profile/page.tsx
 import { getServerSession } from "next-auth/next";
 import { redirect } from "next/navigation";
@@ -44,7 +42,7 @@ export default async function ProfilePage() {
           jumlahDokumenKredit: true,
           description: true,
           noRekening: true,
-          noBIP: true,
+          noNIB: true,
           noNPWP: true,
         },
       },
@@ -55,4 +53,3 @@ export default async function ProfilePage() {
 
   return <ProfileClient data={userData} />;
 }
-

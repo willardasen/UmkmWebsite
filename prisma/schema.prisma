@@ -18,7 +18,7 @@ model Admin {
   email     String   @unique
   password  String
   name      String
-  role      Role     @default(BANK) 
+  role      Role     @default(BANK)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -34,7 +34,7 @@ model UMKMUser {
   updatedAt DateTime @updatedAt
 
   // Relasi satu-satu dengan data UMKM
-  umkm             UMKM? // Opsional, karena mungkin user belum membuat data UMKM
+  umkm UMKM? // Opsional, karena mungkin user belum membuat data UMKM
   // Relasi ke Loan Applications (sebagai pemohon)
   // loanApplications LoanApplication[]
   // Jika diperlukan, relasi ke SRLAssessment
@@ -42,7 +42,7 @@ model UMKMUser {
 }
 
 model UMKM {
-  id                  String   @id @default(cuid())
+  id                  String          @id @default(cuid())
   name                String
   alamat              String
   rt_rw               String
@@ -65,11 +65,11 @@ model UMKM {
   description         String
   noRekening          String
   noNPWP              String
-  noBIP               String
-  userId              String   @unique // Menjamin satu UMKM hanya terikat pada satu akun UMKMUser
-  user                UMKMUser @relation(fields: [userId], references: [id], onDelete: Cascade)
-  createdAt           DateTime @default(now())
-  updatedAt           DateTime @updatedAt
+  noNIB               String
+  userId              String          @unique // Menjamin satu UMKM hanya terikat pada satu akun UMKMUser
+  user                UMKMUser        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt           DateTime        @default(now())
+  updatedAt           DateTime        @updatedAt
 
   // Relasi ke aplikasi pinjaman
   loanApplications LoanApplication[]
@@ -82,8 +82,8 @@ model LoanApplication {
   tujuan         String
   status         LoanStatus  @default(PENDING)
   // Relasi ke data UMKM
-  umkmId     String
-  umkm       UMKM        @relation(fields: [umkmId], references: [id], onDelete: Cascade)
+  umkmId         String
+  umkm           UMKM        @relation(fields: [umkmId], references: [id], onDelete: Cascade)
   // Opsional, jika kamu ingin menyimpan decision dari ML service
   mlDecision     MlDecision?
   createdAt      DateTime    @default(now())
@@ -94,18 +94,18 @@ model LoanApplication {
 }
 
 model SRLAssessment {
-  id                String   @id @default(cuid())
+  id        String   @id @default(cuid())
   // userId            String   @unique
   // user              UMKMUser @relation(fields: [userId], references: [id], onDelete: Cascade)
-  umkmId     String @unique
-  umkm       UMKM        @relation(fields: [umkmId], references: [id], onDelete: Cascade)
+  umkmId    String   @unique
+  umkm      UMKM     @relation(fields: [umkmId], references: [id], onDelete: Cascade)
   // lamaUsahaBerjalan Int
   // jumlahKaryawan    Int
   // omzetPerTahun     Float
   // jumlahAset        Float
-  score             Int?
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
+  score     Int?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 enum LoanStatus {

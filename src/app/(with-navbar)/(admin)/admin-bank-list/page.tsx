@@ -38,7 +38,7 @@ export default async function AdminBankListPage() {
               <tr key={admin.id} className="border-t">
                 <td className="p-4">{admin.name}</td>
                 <td className="p-4">{admin.email}</td>
-                <td className="p-4">{new Date(admin.createdAt).toLocaleDateString()}</td>
+                <td className="p-4">{new Date(admin.createdAt).toLocaleDateString("id-ID")}</td>
               </tr>
             ))}
           </tbody>

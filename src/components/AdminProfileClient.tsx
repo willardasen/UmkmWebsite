@@ -63,7 +63,7 @@ export default function AdminProfileClient({ adminData }: AdminProfileClientProp
             <label className="text-gray-700">Joined At</label>
             <input
               type="text"
-              value={new Date(adminData.createdAt).toLocaleDateString()}
+              value={new Date(adminData.createdAt).toLocaleDateString("id-ID")}
               disabled
               className="mt-1 p-2 border rounded bg-gray-100"
             />
