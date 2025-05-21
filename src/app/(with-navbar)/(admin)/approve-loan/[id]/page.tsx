@@ -128,7 +128,7 @@ export default function LoanDetailPage() {
         <div className="bg-blue-200 p-4 rounded-md">
           <p>
             <strong>Jumlah Permintaan:</strong> Rp{" "}
-            {loan.jumlahPinjamanString("id-ID")}
+            {loan.jumlahPinjaman.toLocaleString("id-ID")}
           </p>
         </div>
         <div className="bg-blue-200 p-4 rounded-md">

@@ -59,17 +59,6 @@ export default function UMKMRequestListPage() {
                 Status: <span className="px-3 py-1 rounded-full font-medium bg-green-100 text-green-700">{req.status}</span>
               </p>
             </div>
-
-            <button 
-            className="px-4 py-2 bg-blue-600 text-white rounded flex items-center justify-center gap-2 min-w-[100px]"
-            >
-              <Link
-                href={`/approve-loan/${req.id}`}
-                className="btn btn-primary rounded-full"
-              >
-                View
-              </Link>
-            </button>
           </div>
         ))}
       </div>
