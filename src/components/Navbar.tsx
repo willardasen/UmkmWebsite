@@ -18,8 +18,8 @@ export default function Navbar() {
   if (role === "USER") {
     items = [
       { label: "List UMKM", href: "/umkm-list" },
-      { label: "Permintaan peminjaman", href: "/loan-list" },
       { label: "SRL score", href: "/srl" },
+      { label: "Permintaan peminjaman", href: "/loan-list" },
     ];
   } else if (role === "BANK") {
     items = [
