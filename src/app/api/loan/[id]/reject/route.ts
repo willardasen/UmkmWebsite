@@ -7,7 +7,10 @@ export async function PATCH(req: NextRequest, context: { params: Promise<{ id: s
   try {
     const updatedLoan = await prisma.loanApplication.update({
       where: { id },
-      data: { status: "REJECTED" },
+      data: { 
+        status: "REJECTED",
+        tanggalKeputusan: new Date(),
+      },
     });
 
     return NextResponse.json(updatedLoan);

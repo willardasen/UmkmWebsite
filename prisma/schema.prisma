@@ -66,7 +66,7 @@ model UMKM {
   noRekening          String
   noNPWP              String
   noNIB               String
-  userId              String          @unique // Menjamin satu UMKM hanya terikat pada satu akun UMKMUser
+  userId              String          @unique
   user                UMKMUser        @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt           DateTime        @default(now())
   updatedAt           DateTime        @updatedAt
@@ -84,8 +84,9 @@ model LoanApplication {
   // Relasi ke data UMKM
   umkmId         String
   umkm           UMKM        @relation(fields: [umkmId], references: [id], onDelete: Cascade)
-  // Opsional, jika kamu ingin menyimpan decision dari ML service
+
   mlDecision     MlDecision?
+  tanggalKeputusan DateTime?
   createdAt      DateTime    @default(now())
   updatedAt      DateTime    @updatedAt
 
