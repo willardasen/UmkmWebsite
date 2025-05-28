@@ -9,6 +9,7 @@ interface Loan {
   tujuan: string;
   status: "PENDING" | "APPROVED" | "REJECTED";
   createdAt: string;
+  tanggalKeputusan: string | null;
 }
 
 export default function LoanListPage() {
@@ -28,19 +29,17 @@ export default function LoanListPage() {
     fetchLoans();
   }, []);
 
-  
-
   return (
     <div className="max-w-6xl mx-auto p-6">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold">Pendaftaran peminjaman dana</h1>
         <button className="btn btn-primary">
           <Link
-          href="/loan-list/loan-application"
-          className="bg-blue-700 hover:bg-blue-800 text-white px-4 py-2 rounded-full font-semibold"
-        >
-          Tambah Peminjaman +
-        </Link>
+            href="/loan-list/loan-application"
+            className="bg-blue-700 hover:bg-blue-800 text-white px-4 py-2 rounded-full font-semibold"
+          >
+            Tambah Peminjaman +
+          </Link>
         </button>
       </div>
 
@@ -48,10 +47,21 @@ export default function LoanListPage() {
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-blue-600">
             <tr>
-              <th className="px-6 py-4 text-left text-sm font-semibold text-white">Tanggal</th>
-              <th className="px-6 py-4 text-left text-sm font-semibold text-white">Jumlah (IDR)</th>
-              <th className="px-6 py-4 text-left text-sm font-semibold text-white">Tujuan</th>
-              <th className="px-6 py-4 text-left text-sm font-semibold text-white">Status</th>
+              <th className="px-6 py-4 text-left text-sm font-semibold text-white">
+                Tanggal Peminjaman
+              </th>
+              <th className="px-6 py-4 text-left text-sm font-semibold text-white">
+                Tanggal Keputusan peminjaman
+              </th>
+              <th className="px-6 py-4 text-left text-sm font-semibold text-white">
+                Jumlah (IDR)
+              </th>
+              <th className="px-6 py-4 text-left text-sm font-semibold text-white">
+                Tujuan
+              </th>
+              <th className="px-6 py-4 text-left text-sm font-semibold text-white">
+                Status
+              </th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
@@ -64,6 +74,17 @@ export default function LoanListPage() {
                           dateStyle: "medium",
                           timeStyle: "short",
                         })
+                      : "-"}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    {loan.tanggalKeputusan
+                      ? new Date(loan.tanggalKeputusan).toLocaleString(
+                          "id-ID",
+                          {
+                            dateStyle: "medium",
+                            timeStyle: "short",
+                          }
+                        )
                       : "-"}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
@@ -91,8 +112,8 @@ export default function LoanListPage() {
               ))
             ) : (
               <tr>
-                <td colSpan={4} className="text-center py-8 text-gray-500">
-                  No loans found.
+                <td colSpan={5} className="text-center py-8 text-gray-500">
+                  Tidak ada pinjaman.
                 </td>
               </tr>
             )}
