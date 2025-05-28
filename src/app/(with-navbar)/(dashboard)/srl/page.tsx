@@ -48,11 +48,61 @@ export default function SRLPage() {
   return (
     <div className="min-h-screen px-4 py-8">
       <div className="max-w-xl mx-auto bg-white shadow-xl rounded-xl p-6 space-y-4">
+        <div className="border border-gray-300 px-4 py-3 rounded bg-gray-100">
+          <p className="text-center text-gray-700 font-semibold mb-2">
+            Keterangan:
+          </p>
+          <div className="grid sm:grid-cols-1 md:grid-cols-2 gap-y-1.5 justify-center w-fit mx-auto text-sm text-gray-700">
+            <div className="flex gap-1.5">
+              <span>SRL 6:</span>
+              <span className="font-bold text-red-600">bad</span>
+            </div>
+            <div className="flex gap-1.5">
+              <span>SRL 8:</span>
+              <span className="font-bold text-blue-600">very good</span>
+            </div>
+            <div className="flex gap-1.5">
+              <span>SRL 7:</span>
+              <span className="font-bold text-yellow-600">good</span>
+            </div>
+            <div className="flex gap-1.5">
+              <span>SRL 9:</span>
+              <span className="font-bold text-green-600">excellent</span>
+            </div>
+          </div>
+        </div>
+
         {score && (
-          <div className="text-center text-xl font-bold text-green-700">
-            🎉 SRL Score Anda: {score}
+          <div className="text-center">
+            <div className="text-xl font-bold mb-1">
+              🎉 SRL Score Anda: {score}
+            </div>
+            <p
+              className={`text-xl font-bold ${
+                score === 6
+                  ? "text-red-600"
+                  : score === 7
+                  ? "text-yellow-600"
+                  : score === 8
+                  ? "text-blue-600"
+                  : score === 9
+                  ? "text-green-600"
+                  : "text-gray-500"
+              }`}
+            >
+              {score === 6
+                ? "Hasil SRL: Bad"
+                : score === 7
+                ? "Hasil SRL: Good"
+                : score === 8
+                ? "Hasil SRL: Very Good"
+                : score === 9
+                ? "Hasil SRL: Excellent"
+                : "Hasil SRL: Tidak diketahui"}
+            </p>
           </div>
         )}
+
         <h1 className="text-center text-lg font-semibold">
           Selamat datang! Isi data UMKM terlebih dahulu!
         </h1>

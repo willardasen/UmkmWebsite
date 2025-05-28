@@ -38,7 +38,7 @@ export default function LoanListPage() {
             href="/loan-list/loan-application"
             className="bg-blue-700 hover:bg-blue-800 text-white px-4 py-2 rounded-full font-semibold"
           >
-            Tambah Peminjaman +
+            Tambah +
           </Link>
         </button>
       </div>

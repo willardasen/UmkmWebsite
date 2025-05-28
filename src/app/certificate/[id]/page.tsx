@@ -17,6 +17,16 @@ export default async function CertificatePage(context: {
   if (!umkm || !srl)
     return <div className="text-center text-red-600">Data not found</div>;
 
+  const getSRLLabel = (score: number) => {
+    if (score === 6) return { label: "Bad", color: "text-red-600" };
+    if (score === 7) return { label: "Good", color: "text-yellow-600" };
+    if (score === 8) return { label: "Very Good", color: "text-blue-600" };
+    if (score === 9) return { label: "Excellent", color: "text-green-600" };
+    return { label: "Tidak Diketahui", color: "text-gray-600" };
+  };
+
+  const { label, color } = getSRLLabel(srl.score ?? -1);
+
   return (
     <div
       className="w-[800px] h-[600px] mx-auto my-10 px-10 py-8 text-center relative bg-white bg-no-repeat bg-cover"
@@ -32,6 +42,8 @@ export default async function CertificatePage(context: {
         {umkm.name} memperoleh skor SRL:{" "}
         <span className="font-semibold">{srl.score}</span>
       </p>
+
+      <p className={`mt-2 text-4xl font-medium ${color}`}>Hasil SRL: {label}</p>
 
       <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2">
         <Image
