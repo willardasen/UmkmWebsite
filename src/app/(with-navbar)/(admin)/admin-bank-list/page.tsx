@@ -24,10 +24,10 @@ export default async function AdminBankListPage() {
         </Link>
       </div>
 
-      <div className="overflow-x-auto shadow rounded bg-white">
-        <table className="min-w-full text-left">
+      <div className="overflow-x-auto rounded-xl border border-gray-200">
+        <table className="min-w-full bg-white shadow rounded">
           <thead>
-            <tr className="bg-gray-100">
+            <tr className="bg-blue-600 text-white">
               <th className="p-4">Name</th>
               <th className="p-4">Email</th>
               <th className="p-4">Tanggal dibuat</th>

@@ -32,6 +32,7 @@ export default function Navbar() {
     items = [
       { label: "List UMKM", href: "/umkm-list" },
       { label: "Manage Admin bank", href: "/admin-bank-list" },
+      { label: "UMKM Summary", href: "/umkm-summary" },
     ];
   }
 

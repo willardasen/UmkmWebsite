@@ -29,29 +29,38 @@ export default async function CertificatePage(context: {
 
   return (
     <div
-      className="w-[800px] h-[600px] mx-auto my-10 px-10 py-8 text-center relative bg-white bg-no-repeat bg-cover"
-      style={{ backgroundImage: "url('/images/certificate-bg.png')" }}
+      className="w-[21cm] h-[29.7cm] px-0"
+      style={{
+        backgroundImage: "url('/images/background-sertif.png')",
+        backgroundSize: "contain",
+        backgroundPosition: "center",
+      }}
     >
-      <h1 className="text-4xl font-semibold text-blue-900 mb-1">SERTIFIKAT</h1>
-      <h2 className="text-2xl text-blue-800 mb-3">NILAI SRL</h2>
-      <div className="w-20 h-1 bg-yellow-500 mx-auto mb-4" />
-      <p className="text-lg mb-1">DIBERIKAN KEPADA</p>
-      <p className="text-2xl font-bold text-gray-800">{umkm.name}</p>
-      <p className="text-md text-gray-700 mb-5">{umkm.noNIB}</p>
-      <p className="text-lg text-gray-800">
-        {umkm.name} memperoleh skor SRL:{" "}
-        <span className="font-semibold">{srl.score}</span>
-      </p>
+      <div className="flex flex-col items-center justify-center h-full px-10 text-center">
+        <h1 className="text-4xl font-semibold text-blue-900 mb-1">
+          SERTIFIKAT
+        </h1>
+        <h2 className="text-2xl text-blue-800 mb-3">NILAI SRL</h2>
+        <div className="w-20 h-1 bg-yellow-500 mx-auto mb-4" />
+        <p className="text-lg mb-1">DIBERIKAN KEPADA</p>
+        <p className="text-2xl font-bold text-gray-800">{umkm.name}</p>
+        <p className="text-md text-gray-700 mb-5">{umkm.noNIB}</p>
+        <p className="text-lg text-gray-800">
+          {umkm.name} memperoleh skor SRL:{" "}
+          <span className="font-semibold">{srl.score}</span>
+        </p>
+        <p className={`mt-2 text-4xl font-medium ${color}`}>
+          Hasil SRL: {label}
+        </p>
 
-      <p className={`mt-2 text-4xl font-medium ${color}`}>Hasil SRL: {label}</p>
-
-      <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2">
-        <Image
-          src="/images/binus-logo.png"
-          alt="BINUS University"
-          width={140}
-          height={50}
-        />
+        <div className="mt-12">
+          <Image
+            src="/images/binus-logo.png"
+            alt="BINUS University"
+            width={140}
+            height={50}
+          />
+        </div>
       </div>
     </div>
   );

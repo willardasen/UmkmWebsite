@@ -2,12 +2,14 @@
 
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
+import ErrorMessage from "@/components/ErrorMessage";
 
 export default function SRLPage() {
   const { data: session } = useSession();
   const [umkm, setUmkm] = useState<any>(null);
   const [score, setScore] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
+  const [showError, setShowError] = useState(false);
 
   // Ambil data UMKM & score SRL
   useEffect(() => {
@@ -35,12 +37,16 @@ export default function SRLPage() {
   // Submit form SRL
   async function handleSubmit() {
     setLoading(true);
+    setShowError(false);
     const res = await fetch("/api/srl/create", {
       method: "POST",
     });
     if (res.ok) {
       const data = await res.json();
       setScore(data.score); // update score setelah dihitung ulang
+      if (data.score < 7) {
+        setShowError(true);
+      }
     }
     setLoading(false);
   }
@@ -49,6 +55,7 @@ export default function SRLPage() {
     <div className="min-h-screen px-4 py-8">
       <div className="max-w-xl mx-auto bg-white shadow-xl rounded-xl p-6 space-y-4">
         <div className="border border-gray-300 px-4 py-3 rounded bg-gray-100">
+          <p className="text-center text-gray-700 font-semibold mb-2">SRL (Startup Readiness Level) merupakan penilaian tingkat kesiapan bisnis.</p>
           <p className="text-center text-gray-700 font-semibold mb-2">
             Keterangan:
           </p>
@@ -77,29 +84,6 @@ export default function SRLPage() {
             <div className="text-xl font-bold mb-1">
               🎉 SRL Score Anda: {score}
             </div>
-            <p
-              className={`text-xl font-bold ${
-                score === 6
-                  ? "text-red-600"
-                  : score === 7
-                  ? "text-yellow-600"
-                  : score === 8
-                  ? "text-blue-600"
-                  : score === 9
-                  ? "text-green-600"
-                  : "text-gray-500"
-              }`}
-            >
-              {score === 6
-                ? "Hasil SRL: Bad"
-                : score === 7
-                ? "Hasil SRL: Good"
-                : score === 8
-                ? "Hasil SRL: Very Good"
-                : score === 9
-                ? "Hasil SRL: Excellent"
-                : "Hasil SRL: Tidak diketahui"}
-            </p>
           </div>
         )}
 
@@ -128,7 +112,7 @@ export default function SRLPage() {
         </div>
 
         <div>
-          <label>Jumlah karyawan</label>
+          <label>Lama usaha berdiri</label>
           <input
             type="text"
             value={
@@ -142,10 +126,20 @@ export default function SRLPage() {
         </div>
 
         <div>
-          <label>Number of Employees</label>
+          <label>Jumlah karyawan</label>
           <input
             type="text"
             value={umkm?.jumlahKaryawan ?? ""}
+            readOnly
+            className="w-full bg-blue-300 p-2 rounded mt-1"
+          />
+        </div>
+
+        <div>
+          <label>Total Aset</label>
+          <input
+            type="text"
+            value={umkm?.totalAset ?? ""}
             readOnly
             className="w-full bg-blue-300 p-2 rounded mt-1"
           />
@@ -168,7 +162,12 @@ export default function SRLPage() {
         >
           {loading ? "Submitting..." : "Submit"}
         </button>
-        {score && (
+
+        {showError && (
+          <ErrorMessage message="Maaf, SRL Anda tidak eligible sehingga tidak mendapat sertifikat." />
+        )}
+
+        {score && score >= 7 && (
           <button
             onClick={() => window.open(`/api/srl/pdf/${umkm?.id}`, "_blank")}
             className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 transition"
