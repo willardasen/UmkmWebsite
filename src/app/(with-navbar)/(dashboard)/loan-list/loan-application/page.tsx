@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { loanSchema, type LoanFormData } from "@/lib/validations/loan";
 import { toast } from "react-hot-toast";
+import ErrorMessage from "@/components/ErrorMessage";
 
 export default function LoanApplication() {
   const router = useRouter();
@@ -80,7 +81,7 @@ export default function LoanApplication() {
             required
           />
           {errors.amount && (
-            <p className="text-red-500 text-sm">{errors.amount}</p>
+            <ErrorMessage message={errors.amount.toString()} />
           )}
         </div>
 
@@ -91,12 +92,12 @@ export default function LoanApplication() {
             value={formData.purpose}
             onChange={handleChange}
             className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Describe why you need this loan..."
+            placeholder="Jelaskan tujuan peminjaman Anda..."
             rows={5}
             required
           />
           {errors.purpose && (
-            <p className="text-red-500 text-sm">{errors.purpose}</p>
+            <ErrorMessage message={errors.purpose} />
           )}
         </div>
 

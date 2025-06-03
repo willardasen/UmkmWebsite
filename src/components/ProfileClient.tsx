@@ -87,7 +87,7 @@ export default function ProfileClient({ data }: { data: ProfileData }) {
             onClick={() => setOpenUmkm(true)}
             className="text-blue-600 hover:underline"
           >
-            Edit
+            New/Edit
           </button>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
