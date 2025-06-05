@@ -99,13 +99,15 @@ export default function UmkmDetailPage() {
         <h2 className="text-xl font-semibold mb-4">Daftar Peminjaman</h2>
         {umkm.loanApplications?.length > 0 ? (
           <div className="overflow-x-auto">
-            <table className="min-w-full bg-white border border-gray-200">
+            <table className="min-w-full bg-white border border-gray-200 table-fixed">
               <thead className="bg-blue-600 text-white">
                 <tr>
-                  <th className="px-4 py-2">No</th>
-                  <th className="px-4 py-2">Jumlah Pinjaman</th>
-                  <th className="px-4 py-2">Status</th>
-                  <th className="px-4 py-2">Tanggal</th>
+                  <th className="px-4 py-2 w-10">No</th>
+                  <th className="px-4 py-2 w-32">Jumlah Pinjaman</th>
+                  <th className="px-4 py-2 w-40">Tujuan</th>
+                  <th className="px-4 py-2 w-32">Status</th>
+                  <th className="px-4 py-2 w-40">Tanggal Peminjaman</th>
+                  <th className="px-4 py-2 w-40">Tanggal Keputusan</th>
                 </tr>
               </thead>
               <tbody>
@@ -114,6 +116,9 @@ export default function UmkmDetailPage() {
                     <td className="px-4 py-2 text-center">{i + 1}</td>
                     <td className="px-4 py-2 text-center">
                       {loan.jumlahPinjaman.toLocaleString("id-ID")}
+                    </td>
+                    <td className="px-4 py-2 text-center">
+                      {loan.tujuan || "-"}
                     </td>
                     <td className="px-4 py-2 text-center">
                       <span
@@ -130,6 +135,13 @@ export default function UmkmDetailPage() {
                     </td>
                     <td className="px-4 py-2 text-center">
                       {new Date(loan.createdAt).toLocaleDateString("id-ID")}
+                    </td>
+                    <td className="px-4 py-2 text-center">
+                      {loan.tanggalKeputusan
+                        ? new Date(loan.tanggalKeputusan).toLocaleDateString(
+                            "id-ID"
+                          )
+                        : "-"}
                     </td>
                   </tr>
                 ))}

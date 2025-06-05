@@ -25,8 +25,10 @@ export async function GET(
           select: {
             id: true,
             jumlahPinjaman: true,
+            tujuan: true,
             status: true,
             createdAt: true,
+            tanggalKeputusan: true,
           },
           orderBy: { createdAt: "desc" },
         },
