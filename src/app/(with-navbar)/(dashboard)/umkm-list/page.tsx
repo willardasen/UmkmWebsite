@@ -97,7 +97,7 @@ export default function UmkmListPage() {
           <thead className="bg-blue-600 text-white">
             <tr>
               <th className="px-4 py-2 text-left">No.</th>
-              <th className="px-4 py-2 text-left">Nama Perusahaan / UMKM</th>
+              <th className="px-4 py-2 text-left">Nama Pengusaha / UMKM</th>
               <th className="px-4 py-2 text-left">Produk Utama</th>
               <th className="px-4 py-2 text-left">Usaha Utama</th>
               <th className="px-4 py-2 text-right">Total Aset (Rp. Juta)</th>

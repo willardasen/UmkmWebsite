@@ -99,7 +99,7 @@ export default function UmkmLoanSummaryPage() {
             <tr>
               <th className="px-4 py-2 text-left">No.</th>
               <th className="px-4 py-2 text-left">
-                Nama Perusahaan / UMKM
+                Nama Pengusaha / UMKM
               </th>
               <th className="px-4 py-2 text-center">SRL</th>
               <th className="px-4 py-2 text-right">Pinjaman Terakhir (Rp)</th>
