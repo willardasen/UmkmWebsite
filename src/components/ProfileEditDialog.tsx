@@ -112,7 +112,7 @@ export default function ProfileEditDialog({
                     onChange={handleChange}
                     className="mt-1 p-2 border rounded pr-10"
                   />
-                  {/* Toggle Icon */}
+                  
                   {isPasswordField && (
                     <button
                       type="button"

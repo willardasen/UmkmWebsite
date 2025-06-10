@@ -5,6 +5,7 @@ import { IoCloseSharp } from "react-icons/io5";
 import React, { useState, useEffect } from "react";
 
 import { FaSpinner } from "react-icons/fa";
+import ErrorMessage from "./ErrorMessage";
 
 interface UmkmEditDialogProps {
   initialData: Record<string, any>;
@@ -66,7 +67,25 @@ export default function UmkmEditDialog({
   };
 
   const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
   const handleSave = async () => {
+    const newErrors: Record<string, string> = {};
+
+    Object.entries(defaultFields).forEach(([key]) => {
+      if (!form[key]) {
+        newErrors[key] = "Field ini wajib diisi.";
+      }
+    });
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return; // Jangan lanjutkan jika ada error
+    }
+
+    setErrors({});
+    setLoading(true);
+
     const isNew = !initialData?.id;
     const url = isNew ? "/api/umkm/create" : `/api/umkm/${initialData.id}`;
     const method = isNew ? "POST" : "PUT";
@@ -132,6 +151,8 @@ export default function UmkmEditDialog({
                       className="mt-1 p-2 border rounded"
                     />
                   )}
+                  {/* Tampilkan Error */}
+                  {errors[key] && <ErrorMessage message={errors[key]} />}
                 </div>
               ))}
           </form>

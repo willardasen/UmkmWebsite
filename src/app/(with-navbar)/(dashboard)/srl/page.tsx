@@ -9,7 +9,7 @@ export default function SRLPage() {
   const [umkm, setUmkm] = useState<any>(null);
   const [score, setScore] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
-  const [showError, setShowError] = useState(false);
+  const [showError, setShowError] = useState<string | null>(null);
 
   // Ambil data UMKM & score SRL
   useEffect(() => {
@@ -37,15 +37,24 @@ export default function SRLPage() {
   // Submit form SRL
   async function handleSubmit() {
     setLoading(true);
-    setShowError(false);
+    setShowError(null);
+
+    if (!umkm) {
+      setShowError(
+        "Harap lengkapi data UMKM terlebih dahulu sebelum menghitung SRL."
+      );
+      setLoading(false);
+      return;
+    }
+
     const res = await fetch("/api/srl/create", {
       method: "POST",
     });
     if (res.ok) {
       const data = await res.json();
-      setScore(data.score); // update score setelah dihitung ulang
+      setScore(data.score); 
       if (data.score < 7) {
-        setShowError(true);
+        setShowError("Maaf, SRL Anda tidak eligible sehingga tidak mendapat sertifikat.");
       }
     }
     setLoading(false);
@@ -55,7 +64,10 @@ export default function SRLPage() {
     <div className="min-h-screen px-4 py-8">
       <div className="max-w-xl mx-auto bg-white shadow-xl rounded-xl p-6 space-y-4">
         <div className="border border-gray-300 px-4 py-3 rounded bg-gray-100">
-          <p className="text-center text-gray-700 font-semibold mb-2">SRL (Startup Readiness Level) merupakan penilaian tingkat kesiapan bisnis.</p>
+          <p className="text-center text-gray-700 font-semibold mb-2">
+            SRL (Startup Readiness Level) merupakan penilaian tingkat kesiapan
+            bisnis.
+          </p>
           <p className="text-center text-gray-700 font-semibold mb-2">
             Keterangan:
           </p>
@@ -163,9 +175,8 @@ export default function SRLPage() {
           {loading ? "Submitting..." : "Submit"}
         </button>
 
-        {showError && (
-          <ErrorMessage message="Maaf, SRL Anda tidak eligible sehingga tidak mendapat sertifikat." />
-        )}
+        {showError && <ErrorMessage message={showError} />}
+
 
         {score && score >= 7 && (
           <button

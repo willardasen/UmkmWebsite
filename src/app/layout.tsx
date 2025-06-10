@@ -5,8 +5,8 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "UMKM Loan System",
-  description: "A web application for UMKM loan applications",
+  title: "UMKM GO",
+  description: "UMKMGO - Aplikasi Peminjaman untuk UMKM",
 };
 
 export default function RootLayout({

@@ -31,6 +31,7 @@ export default function RegisterForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    setServerError("");
 
     try {
       registerSchema.parse(formData);
@@ -56,9 +57,9 @@ export default function RegisterForm() {
         });
         setErrors(validationErrors);
       }
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
   return (
@@ -148,7 +149,11 @@ export default function RegisterForm() {
             className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 hover:text-gray-900"
             tabIndex={-1}
           >
-            {showConfirmPassword ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
+            {showConfirmPassword ? (
+              <FaEyeSlash size={18} />
+            ) : (
+              <FaEye size={18} />
+            )}
           </button>
         </div>
 

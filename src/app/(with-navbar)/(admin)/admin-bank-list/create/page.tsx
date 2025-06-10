@@ -2,15 +2,25 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import {
+  CreateAdminBankForm,
+  createAdminBankSchema,
+} from "@/lib/validations/createAdmin";
+import { ZodError } from "zod";
+import ErrorMessage from "@/components/ErrorMessage";
 
 export default function CreateAdminBankPage() {
   const router = useRouter();
-  const [form, setForm] = useState({
+  const [form, setForm] = useState<CreateAdminBankForm>({
     name: "",
     email: "",
-    password:""
+    password: "",
   });
+  const [serverError, setServerError] = useState("");
 
+  const [errors, setErrors] = useState<
+    Partial<Record<keyof CreateAdminBankForm, string>>
+  >({});
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -20,22 +30,39 @@ export default function CreateAdminBankPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    setServerError("");
 
     try {
+      createAdminBankSchema.parse(form);
+      setErrors({});
+
       const res = await fetch("/api/admin/register-admin-bank", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
       });
 
-      if (res.ok) {
-        router.push("/admin-bank-list");
-      } else {
-        alert("Failed to create admin bank");
+      const data = await res.json();
+
+      if (!res.ok) {
+        setServerError(data.message || "Terjadi kesalahan");
+        return;
       }
+
+      router.push("/admin-bank-list");
     } catch (error) {
-      console.error(error);
-      alert("Error creating admin bank");
+      if (error instanceof ZodError) {
+        const fieldErrors: Partial<Record<keyof CreateAdminBankForm, string>> =
+          {};
+        error.errors.forEach((err) => {
+          const field = err.path[0] as keyof CreateAdminBankForm;
+          fieldErrors[field] = err.message;
+        });
+        setErrors(fieldErrors);
+      } else {
+        console.error(error);
+        alert("Error creating admin bank");
+      }
     } finally {
       setLoading(false);
     }
@@ -45,7 +72,10 @@ export default function CreateAdminBankPage() {
     <div className="p-6 max-w-xl mx-auto space-y-8">
       <h2 className="text-2xl font-semibold">Create Admin Bank</h2>
 
-      <form onSubmit={handleSubmit} className="bg-white p-6 shadow rounded space-y-4">
+      <form
+        onSubmit={handleSubmit}
+        className="bg-white p-6 shadow rounded space-y-4"
+      >
         <div className="flex flex-col">
           <label className="text-gray-700">Name</label>
           <input
@@ -56,6 +86,7 @@ export default function CreateAdminBankPage() {
             className="mt-1 p-2 border rounded"
             required
           />
+          {errors.name && <ErrorMessage message={errors.name} />}
         </div>
         <div className="flex flex-col">
           <label className="text-gray-700">Email</label>
@@ -67,6 +98,7 @@ export default function CreateAdminBankPage() {
             className="mt-1 p-2 border rounded"
             required
           />
+          {errors.email && <ErrorMessage message={errors.email} />}
         </div>
         <div className="flex flex-col">
           <label className="text-gray-700">Password</label>
@@ -78,7 +110,11 @@ export default function CreateAdminBankPage() {
             className="mt-1 p-2 border rounded"
             required
           />
+          {errors.password && <ErrorMessage message={errors.password} />}
         </div>
+
+        {serverError && <ErrorMessage message={serverError} />}
+
 
         <div className="flex justify-end gap-2">
           <button

@@ -16,13 +16,12 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    // ➡️ Cek kalau email sudah ada
     const existingAdmin = await prisma.admin.findUnique({
       where: { email },
     });
 
     if (existingAdmin) {
-      return NextResponse.json({ message: "Email already registered" }, { status: 409 });
+      return NextResponse.json({ message: "Email ini sudah terdaftar" }, { status: 409 });
     }
 
     const hashed = await bcrypt.hash(password, 10);
