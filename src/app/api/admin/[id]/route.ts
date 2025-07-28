@@ -1,13 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "../../../../../prisma/client";
 
-export async function DELETE(
-  _: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function DELETE(request: NextRequest) {
   try {
+    const url = new URL(request.url);
+    const id = url.pathname.split("/").pop(); // Ambil `id` dari URL
+
+    if (!id) {
+      return NextResponse.json({ error: "ID tidak ditemukan di URL" }, { status: 400 });
+    }
+
     await prisma.admin.delete({
-      where: { id: params.id },
+      where: { id },
     });
 
     return NextResponse.json({ success: true });
