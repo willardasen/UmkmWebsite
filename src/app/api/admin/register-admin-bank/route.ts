@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
 
   const { email, password, name } = await req.json();
   if (!email || !password || !name) {
-    return NextResponse.json({ message: "Missing fields" }, { status: 400 });
+    return NextResponse.json({ message: "Field masih kosong" }, { status: 400 });
   }
 
   try {

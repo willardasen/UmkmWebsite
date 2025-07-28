@@ -1,5 +1,4 @@
 "use client";
-// src/app/(with-navbar)/layout.tsx
 import Navbar from "@/components/Navbar";
 import { SessionProvider } from "next-auth/react";
 import { Toaster } from "react-hot-toast";

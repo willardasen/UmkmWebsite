@@ -11,7 +11,7 @@ export default function SRLPage() {
   const [loading, setLoading] = useState(false);
   const [showError, setShowError] = useState<string | null>(null);
 
-  // Ambil data UMKM & score SRL
+
   useEffect(() => {
     async function fetchData() {
       if (!session?.user?.id) return;
@@ -34,7 +34,6 @@ export default function SRLPage() {
     fetchData();
   }, [session]);
 
-  // Submit form SRL
   async function handleSubmit() {
     setLoading(true);
     setShowError(null);

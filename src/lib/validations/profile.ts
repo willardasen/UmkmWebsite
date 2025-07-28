@@ -1,4 +1,3 @@
-// validationSchema.ts
 import { z } from 'zod';
 
 const passwordRegex = /^(?=.*[A-Z])(?=.*\d).+$/;

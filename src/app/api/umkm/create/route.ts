@@ -4,13 +4,11 @@ import { authOptions } from "@/lib/authOptions";
 import { prisma } from "../../../../../prisma/client";
 
 export async function POST(req: NextRequest) {
-  // 1️⃣ Only USERs can create their UMKM
   const session = await getServerSession(authOptions);
   if (!session || session.user.role !== "USER") {
     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
   }
 
-  // 2️⃣ Parse body
   const {
     name,
     alamat,
@@ -37,7 +35,7 @@ export async function POST(req: NextRequest) {
     noNIB,
   } = await req.json();
 
-  // 3️⃣ Basic validation
+
   if (
     !name ||
     !alamat ||
@@ -51,7 +49,6 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    // 4️⃣ Create UMKM
     const newUmkm = await prisma.uMKM.create({
       data: {
         name,
@@ -61,17 +58,17 @@ export async function POST(req: NextRequest) {
         kecamatan,
         kabupaten,
         provinsi,
-        tahunBerdiri:     Number(tahunBerdiri),
+        tahunBerdiri:Number(tahunBerdiri),
         usahaUtama,
         produkUtama,
         badanHukum,
-        jumlahKaryawan:   Number(jumlahKaryawan),
+        jumlahKaryawan:Number(jumlahKaryawan),
         sistemPenjualan,
         persaingan,
-        totalAset:        parseFloat(totalAset),
-        penjualanPerTahun: parseFloat(penjualanPerTahun),
-        proyeksiPenjualan: parseFloat(proyeksiPenjualan),
-        nilaiAsetJaminan:  parseFloat(nilaiAsetJaminan),
+        totalAset:parseFloat(totalAset),
+        penjualanPerTahun:parseFloat(penjualanPerTahun),
+        proyeksiPenjualan:parseFloat(proyeksiPenjualan),
+        nilaiAsetJaminan: parseFloat(nilaiAsetJaminan),
         jumlahDokumenKredit: parseFloat(jumlahDokumenKredit),
         description,
         noRekening,

@@ -1,4 +1,3 @@
-// src/app/api/umkm/[id]/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/authOptions";
@@ -40,7 +39,7 @@ export async function PUT(
     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
   }
 
-  // Hanya owner yang boleh update
+  
   const existing = await prisma.uMKM.findUnique({ where: { id: params.id } });
   if (!existing || existing.userId !== session.user.id) {
     return NextResponse.json({ message: "Forbidden" }, { status: 403 });
@@ -80,22 +79,4 @@ export async function PUT(
   } catch (e: any) {
     return NextResponse.json({ message: e.message }, { status: 500 });
   }
-}
-
-export async function DELETE(
-  _: NextRequest,
-  { params }: { params: { id: string } }
-) {
-  const session = await getServerSession(authOptions);
-  if (!session || session.user.role !== "USER") {
-    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
-  }
-
-  const existing = await prisma.uMKM.findUnique({ where: { id: params.id } });
-  if (!existing || existing.userId !== session.user.id) {
-    return NextResponse.json({ message: "Forbidden" }, { status: 403 });
-  }
-
-  await prisma.uMKM.delete({ where: { id: params.id } });
-  return NextResponse.json({ message: "UMKM deleted" });
 }

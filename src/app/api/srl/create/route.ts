@@ -3,7 +3,6 @@ import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/authOptions";
 import { prisma } from "../../../../../prisma/client";
 
-// Fungsi penilaian
 function scoreLamaUsaha(years: number): number {
   if (years <= 2) return 1;
   if (years <= 5) return 2;
@@ -36,7 +35,6 @@ function scoreAset(v: number): number {
   return 5;
 }
 
-// Handler API POST
 export async function POST(req: NextRequest) {
   const session = await getServerSession(authOptions);
   if (!session || session.user.role !== "USER") {
@@ -55,7 +53,7 @@ export async function POST(req: NextRequest) {
   const lamaUsaha = currentYear - umkm.tahunBerdiri;
 
   const totalScore =
-    5 + // Punya NIB
+    5 +
     scoreLamaUsaha(lamaUsaha) +
     scoreKaryawan(umkm.jumlahKaryawan) +
     scoreOmzet(umkm.penjualanPerTahun) +

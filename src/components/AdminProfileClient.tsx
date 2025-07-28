@@ -19,7 +19,7 @@ export default function AdminProfileClient({ adminData }: AdminProfileClientProp
   const [email, setEmail] = useState(adminData.email);
 
   return (
-    <>
+    <div>
       {/* Profile Section */}
       <section className="bg-white p-6 shadow rounded">
         <div className="flex justify-between items-center mb-4">
@@ -82,6 +82,6 @@ export default function AdminProfileClient({ adminData }: AdminProfileClientProp
           setOpen(false);
         }}
       />
-    </>
+    </div>
   );
 }

@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -32,13 +26,7 @@ model UMKMUser {
   noTelepon String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  // Relasi satu-satu dengan data UMKM
-  umkm UMKM? // Opsional, karena mungkin user belum membuat data UMKM
-  // Relasi ke Loan Applications (sebagai pemohon)
-  // loanApplications LoanApplication[]
-  // Jika diperlukan, relasi ke SRLAssessment
-  // srlAssessments   SRLAssessment?
+  umkm UMKM? 
 }
 
 model UMKM {
@@ -70,8 +58,6 @@ model UMKM {
   user                UMKMUser        @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt           DateTime        @default(now())
   updatedAt           DateTime        @updatedAt
-
-  // Relasi ke aplikasi pinjaman
   loanApplications LoanApplication[]
   srlAssessments   SRLAssessment?
 }
@@ -81,29 +67,18 @@ model LoanApplication {
   jumlahPinjaman Float
   tujuan         String
   status         LoanStatus  @default(PENDING)
-  // Relasi ke data UMKM
   umkmId         String
   umkm           UMKM        @relation(fields: [umkmId], references: [id], onDelete: Cascade)
-
   mlDecision     MlDecision?
   tanggalKeputusan DateTime?
   createdAt      DateTime    @default(now())
   updatedAt      DateTime    @updatedAt
-
-  // userId String
-  // user   UMKMUser @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model SRLAssessment {
   id        String   @id @default(cuid())
-  // userId            String   @unique
-  // user              UMKMUser @relation(fields: [userId], references: [id], onDelete: Cascade)
   umkmId    String   @unique
   umkm      UMKM     @relation(fields: [umkmId], references: [id], onDelete: Cascade)
-  // lamaUsahaBerjalan Int
-  // jumlahKaryawan    Int
-  // omzetPerTahun     Float
-  // jumlahAset        Float
   score     Int?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

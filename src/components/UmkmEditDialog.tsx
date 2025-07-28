@@ -40,7 +40,6 @@ const defaultFields: Record<string, string> = {
   noNIB: "",
 };
 
-// Field enum dan opsinya
 const enumFields: Record<string, string[]> = {
   badanHukum: ["CV", "PERSEORANGAN"],
   sistemPenjualan: ["RETAIL", "DISTRIBUTOR", "RETAILDANDISTRIBUTOR"],
@@ -80,7 +79,7 @@ export default function UmkmEditDialog({
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
-      return; // Jangan lanjutkan jika ada error
+      return;
     }
 
     setErrors({});

@@ -1,5 +1,3 @@
-// File: app/api/loan/[id]/predict/route.ts
-
 import { prisma } from "../../../../../../prisma/client";
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -28,7 +26,7 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
       'Tingkat Persaingan Usaha': loan.umkm.persaingan === 'TINGGI' ? 3 : loan.umkm.persaingan === 'SEDANG' ? 2 : 1,
       'Startup Readiness Level': (
         await prisma.sRLAssessment.findUnique({ where: { umkmId: loan.umkm.id } })
-      )?.score ?? 5
+      )?.score ?? 6
     };
 
     const flaskRes = await fetch(process.env.ML_API_URL || 'http://localhost:5000/predict', {

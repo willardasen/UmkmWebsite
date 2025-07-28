@@ -6,7 +6,6 @@ const prisma = new PrismaClient();
 async function main() {
   const hashedPassword = await bcrypt.hash('password123', 10);
 
-  // Admin
   const admin1 = await prisma.admin.upsert({
     where: { email: 'system.admin@example.com' },
     update: {},
@@ -29,7 +28,6 @@ async function main() {
     },
   });
 
-  // UMKM Users
   const users = await Promise.all([
     prisma.uMKMUser.upsert({
       where: { email: 'user1@example.com' },
@@ -87,7 +85,6 @@ async function main() {
   ]);
 
 
-  // UMKM Profiles
 await Promise.all([
   prisma.uMKM.upsert({
     where: { userId: users[0].id },

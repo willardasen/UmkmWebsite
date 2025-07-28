@@ -1,4 +1,3 @@
-// lib/validations/admin.ts
 import { z } from "zod";
 
 const passwordRegex = /^(?=.*[A-Z])(?=.*\d).+$/;
