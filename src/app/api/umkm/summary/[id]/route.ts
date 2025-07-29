@@ -1,11 +1,12 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "../../../../../../prisma/client";
 
-export async function GET(
-  _req: Request,
-  context: { params: { id: string } }
-) {
-  const { id } = await context.params;
+export async function GET( request: NextRequest) {
+   const id = request.nextUrl.pathname.split("/").pop(); // ambil id dari URL
+
+  if (!id) {
+    return NextResponse.json({ error: "ID tidak ditemukan di URL" }, { status: 400 });
+  }
 
   try {
     const umkm = await prisma.uMKM.findUnique({
