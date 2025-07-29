@@ -4,7 +4,7 @@ import { prisma } from "../../../../../prisma/client";
 export async function DELETE(request: NextRequest) {
   try {
     const url = new URL(request.url);
-    const id = url.pathname.split("/").pop(); // Ambil `id` dari URL
+    const id = url.pathname.split("/").pop();
 
     if (!id) {
       return NextResponse.json({ error: "ID tidak ditemukan di URL" }, { status: 400 });

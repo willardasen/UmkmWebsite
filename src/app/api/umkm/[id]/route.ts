@@ -4,7 +4,7 @@ import { authOptions } from "@/lib/authOptions";
 import { prisma } from "../../../../../prisma/client";
 
 export async function GET(request: NextRequest) {
-  const id = request.nextUrl.pathname.split("/").pop(); // ambil ID dari URL
+  const id = request.nextUrl.pathname.split("/").pop();
 
   if (!id) {
     return NextResponse.json({ error: "Missing UMKM ID" }, { status: 400 });
