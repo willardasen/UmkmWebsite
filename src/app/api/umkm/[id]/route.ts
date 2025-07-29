@@ -31,25 +31,27 @@ export async function GET(request: NextRequest) {
 }
 
 
-export async function PUT(
-  req: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function PUT(  request: NextRequest) {
   const session = await getServerSession(authOptions);
+
   if (!session || session.user.role !== "USER") {
     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
   }
 
-  
-  const existing = await prisma.uMKM.findUnique({ where: { id: params.id } });
+  const id = request.nextUrl.pathname.split("/").pop();
+  if (!id) {
+    return NextResponse.json({ message: "Missing UMKM ID" }, { status: 400 });
+  }
+
+  const existing = await prisma.uMKM.findUnique({ where: { id } });
   if (!existing || existing.userId !== session.user.id) {
     return NextResponse.json({ message: "Forbidden" }, { status: 403 });
   }
 
-  const data = await req.json();
+  const data = await request.json();
   try {
     const updated = await prisma.uMKM.update({
-      where: { id: params.id },
+      where: { id},
       data: {
         name: data.name,
         alamat: data.alamat,
