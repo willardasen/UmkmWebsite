@@ -3,11 +3,12 @@ import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/authOptions";
 import { prisma } from "../../../../../prisma/client";
 
-export async function GET(
-  request: Request,
-  context: { params: { id: string } }
-) {
-  const { id } = await context.params;
+export async function GET(request: NextRequest) {
+  const id = request.nextUrl.pathname.split("/").pop(); // ambil ID dari URL
+
+  if (!id) {
+    return NextResponse.json({ error: "Missing UMKM ID" }, { status: 400 });
+  }
 
   try {
     const umkm = await prisma.uMKM.findUnique({
