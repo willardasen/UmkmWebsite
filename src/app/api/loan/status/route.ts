@@ -9,7 +9,7 @@ export async function GET() {
     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
   }
 
-  // Semua pinjaman milik UMKM user
+
   const loans = await prisma.loanApplication.findMany({
     where: { umkm: { userId: session.user.id } },
     include: { umkm: true },

@@ -13,10 +13,10 @@ export async function GET(req: NextRequest) {
 
   const loans = await prisma.loanApplication.findMany({
     where: {
-      status: "REJECTED", // Kalau mau semua loan hapus condition ini
+      status: "REJECTED", 
     },
     include: {
-      umkm: true, // supaya bisa ambil nama UMKM, no rekening, dll
+      umkm: true, 
     },
   });
 
